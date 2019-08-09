@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/primary_dark"
+    tools:context=".informacion">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/grad_bg">
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:layout_marginTop="40dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="30dp"
+                android:fontFamily="@font/caviardreamsbold"
+                android:gravity="center"
+                android:textColor="#ffff"
+                android:text="Tipos de Contenedores"/>
+
+            <TextView
+                android:layout_marginTop="100dp"
+                android:layout_marginLeft="30dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="#ffff"
+                android:fontFamily="@font/caviardreamsbold"
+                android:textSize="20dp"
+                android:text="Residuo Domiciliario: "/>
+            <ImageView
+                android:layout_marginTop="150dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:src="@drawable/basuraamarilla"/>
+            <TextView
+                android:textSize="15dp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:text="Generados por actividades domesticas realizadas en los domicilios. - Restos de alimentos, revistas, botellas, latas, etc."
+                android:layout_marginTop="280dp"
+                android:textColor="#ffff"
+                android:fontFamily="@font/caviardreamsbold"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+
+
+        </RelativeLayout>
+    </ScrollView>
+
+</FrameLayout>

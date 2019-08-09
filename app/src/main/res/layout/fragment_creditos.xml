@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#FFFFFF"
+    android:orientation="vertical"
+
+    tools:context=".creditos">
+
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/grad_bg">
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:layout_marginTop="40dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="30dp"
+                android:fontFamily="@font/caviardreamsbold"
+                android:gravity="center"
+                android:textColor="#ffff"
+                android:text="Proximos modulos"/>
+
+            <TextView
+                android:layout_marginTop="100dp"
+                android:layout_marginLeft="30dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="#ffff"
+                android:fontFamily="@font/caviardreamsbold"
+                android:textSize="20dp"
+                android:text="Ruta de de carros Contenedores."/>
+            <ImageView
+                android:layout_marginTop="150dp"
+
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:foregroundGravity="center"
+                android:src="@drawable/carro_contenedor"/>
+            <TextView
+                android:textSize="15dp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:text="El primer distrito en ser mapeado, cuenta con 157 contenedores en total, contamos con el apoyo incondicional del Alcalde, Paul Rondon."
+                android:layout_marginTop="380dp"
+                android:textColor="#ffff"
+                android:fontFamily="@font/caviardreamsbold"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+
+
+        </RelativeLayout>
+    </ScrollView>
+</FrameLayout>

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">RotClean</string>
+    <string name="afirmative">Yes</string>
+    <string name="negative">No</string>
+    <string name="lat">Latitude:</string>
+    <string name="lon">Length:</string>
+    <string name="reg_tacho">Register Container</string>
+    <string name="desc">Description:</string>
+    <string name="correo">Mail:</string>
+    <string name="telefono">Cellphone:</string>
+    <string name="version">Version:</string>
+    <string name="lanzamiento">Launching:</string>
+    <string name="licensia">License:</string>
+    <string name="desarrolladores">Developers:</string>
+    <string name="buscar">Search</string>
+    <string name="registrar">Register</string>
+    <string name="creditos">Credits</string>
+    <string name="marcador_gracias">Thanks for using RotClean.</string>
+    <string name="ubicacion">My Location.</string>
+    <string name="copyrigth">© Copyright 2019 Copyright.es -  All rights reserved.</string>
+    <string name="title_activity_maps">Map</string>
+    <string name="fecha_lanzamiento">January 31, 2019</string>
+    <string name="desc_rot">RotClean is an application that helps people to find the location of garbage collectors to improve the management of solid waste, cleaning services and recycling points, with the collaboration of Rotary Club Internacional and developed by The Summit Developers.</string>
+    <string name="about">Acerca de.</string>
+    <string name="about_desc">Somos una empresa de desarrollo de software que tiene como objetivo mejorar los procesos en cualquier industria, mediante ideas y proyectos innovadores usando tecnologias web y moviles alojadas en la nube.</string>
+</resources>
