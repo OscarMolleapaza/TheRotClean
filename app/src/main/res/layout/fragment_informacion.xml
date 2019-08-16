@@ -25,30 +25,275 @@
                 android:textColor="#ffff"
                 android:text="Tipos de Contenedores"/>
 
-            <TextView
-                android:layout_marginTop="100dp"
-                android:layout_marginLeft="30dp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textColor="#ffff"
-                android:fontFamily="@font/caviardreamsbold"
-                android:textSize="20dp"
-                android:text="Residuo Domiciliario: "/>
-            <ImageView
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <ImageView
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginTop="120dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/basuraverde"/>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:orientation="vertical"
+                    android:layout_height="wrap_content">
+                    <TextView
+                        android:layout_marginLeft="15dp"
+                        android:layout_marginTop="150dp"
+                        android:textSize="25dp"
+                        android:fontFamily="@font/caviardreamsbold"
+                        android:textColor="#ffff"
+                        android:text="VIDRIO"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
+
+                    <Button
+                        android:layout_marginLeft="15dp"
+                        android:layout_marginRight="20dp"
+                        android:background="#039451"
+                        android:layout_width="match_parent"
+                        android:layout_height="20dp"
+                        />
+                </LinearLayout>
+
+
+            </LinearLayout>
+
+            <LinearLayout
                 android:layout_marginTop="150dp"
+                android:orientation="horizontal"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:src="@drawable/basuraamarilla"/>
-            <TextView
-                android:textSize="15dp"
-                android:layout_marginLeft="20dp"
-                android:layout_marginRight="20dp"
-                android:text="Generados por actividades domesticas realizadas en los domicilios. - Restos de alimentos, revistas, botellas, latas, etc."
-                android:layout_marginTop="280dp"
-                android:textColor="#ffff"
-                android:fontFamily="@font/caviardreamsbold"
+                android:layout_height="wrap_content">
+
+                <ImageView
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginTop="120dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/basuraploma"/>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:orientation="vertical"
+                    android:layout_height="wrap_content">
+                    <TextView
+                        android:layout_marginLeft="15dp"
+                        android:layout_marginTop="150dp"
+                        android:textSize="25dp"
+                        android:fontFamily="@font/caviardreamsbold"
+                        android:textColor="#ffff"
+                        android:text="PLÁSTICOS"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
+
+                    <Button
+                        android:layout_marginLeft="15dp"
+                        android:layout_marginRight="20dp"
+                        android:background="#bdbfc1"
+                        android:layout_width="match_parent"
+                        android:layout_height="20dp"
+                        />
+                </LinearLayout>
+
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_marginTop="300dp"
+                android:orientation="horizontal"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content">
+
+                <ImageView
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginTop="120dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/basuranaranja"/>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:orientation="vertical"
+                    android:layout_height="wrap_content">
+                    <TextView
+                        android:layout_marginLeft="15dp"
+                        android:layout_marginTop="150dp"
+                        android:textSize="25dp"
+                        android:fontFamily="@font/caviardreamsbold"
+                        android:textColor="#ffff"
+                        android:text="RESIDUOS GENERALES"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
+
+                    <Button
+                        android:layout_marginLeft="15dp"
+                        android:layout_marginRight="20dp"
+                        android:background="#f2a12a"
+                        android:layout_width="match_parent"
+                        android:layout_height="20dp"
+                        />
+                </LinearLayout>
+
+
+            </LinearLayout>
+            <LinearLayout
+                android:layout_marginTop="450dp"
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <ImageView
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginTop="120dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/basuraroja"/>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:orientation="vertical"
+                    android:layout_height="wrap_content">
+                    <TextView
+                        android:layout_marginLeft="15dp"
+                        android:layout_marginTop="150dp"
+                        android:textSize="25dp"
+                        android:fontFamily="@font/caviardreamsbold"
+                        android:textColor="#ffff"
+                        android:text="RESIDUOS PELIGROSOS"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
+
+                    <Button
+                        android:layout_marginLeft="15dp"
+                        android:layout_marginRight="20dp"
+                        android:background="#e33337"
+                        android:layout_width="match_parent"
+                        android:layout_height="20dp"
+                        />
+                </LinearLayout>
+
+
+            </LinearLayout>
+            <LinearLayout
+                android:layout_marginTop="600dp"
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <ImageView
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginTop="120dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/basuraazul"/>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:orientation="vertical"
+                    android:layout_height="wrap_content">
+                    <TextView
+                        android:layout_marginLeft="15dp"
+                        android:layout_marginTop="150dp"
+                        android:textSize="25dp"
+                        android:fontFamily="@font/caviardreamsbold"
+                        android:textColor="#ffff"
+                        android:text="PAPEL Y CARTON"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
+
+                    <Button
+                        android:layout_marginLeft="15dp"
+                        android:layout_marginRight="20dp"
+                        android:background="#0d4e90"
+                        android:layout_width="match_parent"
+                        android:layout_height="20dp"
+                        />
+                </LinearLayout>
+
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_marginTop="750dp"
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <ImageView
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginTop="120dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/basuracafe"/>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:orientation="vertical"
+                    android:layout_height="wrap_content">
+                    <TextView
+                        android:layout_marginLeft="15dp"
+                        android:layout_marginTop="150dp"
+                        android:textSize="25dp"
+                        android:fontFamily="@font/caviardreamsbold"
+                        android:textColor="#ffff"
+                        android:text="ORGANICOS"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
+
+                    <Button
+                        android:layout_marginLeft="15dp"
+                        android:layout_marginRight="20dp"
+                        android:background="#64360b"
+                        android:layout_width="match_parent"
+                        android:layout_height="20dp"
+                        />
+                </LinearLayout>
+
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_marginTop="900dp"
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <ImageView
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginTop="120dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/basuraamarilla"/>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:orientation="vertical"
+                    android:layout_height="wrap_content">
+                    <TextView
+                        android:layout_marginLeft="15dp"
+                        android:layout_marginTop="150dp"
+                        android:textSize="25dp"
+                        android:fontFamily="@font/caviardreamsbold"
+                        android:textColor="#ffff"
+                        android:text="METALES"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
+
+                    <Button
+                        android:layout_marginLeft="15dp"
+                        android:layout_marginRight="20dp"
+                        android:background="#d9cc37"
+                        android:layout_width="match_parent"
+                        android:layout_height="20dp"
+                        />
+                </LinearLayout>
+
+
+            </LinearLayout>
 
 
 
