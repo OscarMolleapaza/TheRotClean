@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="tipo_usuario">
+
+        <item>adminisrador</item>
+        <item>colaborador</item>
+    </string-array>
+    <string-array name="lugares_tacho">
+        <item>yanahuara</item>
+        <item>arequipa</item>
+    </string-array>
+</resources>

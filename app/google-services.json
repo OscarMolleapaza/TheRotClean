@@ -1,42 +1,34 @@
 {
   "project_info": {
-    "project_number": "225201620862",
-    "firebase_url": "https://rotcleanv1-1564445427404.firebaseio.com",
-    "project_id": "rotcleanv1-1564445427404",
-    "storage_bucket": "rotcleanv1-1564445427404.appspot.com"
+    "project_number": "577619121108",
+    "firebase_url": "https://rotcleanlast.firebaseio.com",
+    "project_id": "rotcleanlast",
+    "storage_bucket": "rotcleanlast.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:225201620862:android:24a17cc84a43380b",
+        "mobilesdk_app_id": "1:577619121108:android:24a17cc84a43380b",
         "android_client_info": {
           "package_name": "com.thesummitdev.rotclean_v1"
         }
       },
       "oauth_client": [
         {
-          "client_id": "225201620862-4n6cr8jnt3dhns4bi514anvo95pa2ce6.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.thesummitdev.rotclean_v1",
-            "certificate_hash": "2d6bd16e2f304be9e8e1c03bc0f46c4d996b4727"
-          }
-        },
-        {
-          "client_id": "225201620862-gedfhceqbvj1036261onvea5pm5bms0d.apps.googleusercontent.com",
+          "client_id": "577619121108-ir6o07vtrdu9fnk67scd897bb73pc08v.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyDjJLK9J8OhwIfmKH-QDqXJrq0J0ipMOt4"
+          "current_key": "AIzaSyBV902gM3vBsDyRT86i5MP_A87DMYEczTA"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "225201620862-gedfhceqbvj1036261onvea5pm5bms0d.apps.googleusercontent.com",
+              "client_id": "577619121108-ir6o07vtrdu9fnk67scd897bb73pc08v.apps.googleusercontent.com",
               "client_type": 3
             }
           ]

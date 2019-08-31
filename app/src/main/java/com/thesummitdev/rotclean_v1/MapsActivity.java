@@ -86,6 +86,8 @@ public class MapsActivity extends AppCompatActivity {
         PrimaryDrawerItem item3 = new PrimaryDrawerItem().withIdentifier( 3 ).withIcon( R.drawable.ic_donation ).withName( "Distritos Disponibles" );
         PrimaryDrawerItem item4 = new PrimaryDrawerItem().withIdentifier( 4 ).withIcon( R.drawable.ic_acerca ).withName( "En Desarrollo" );
         PrimaryDrawerItem item5 = new PrimaryDrawerItem().withIdentifier( 5 ).withIcon( R.drawable.ic_settingsajuestes ).withName( "Sobre Nosotros" );
+        PrimaryDrawerItem item6 = new PrimaryDrawerItem().withIdentifier( 6 ).withIcon( R.drawable.ic_menu_share ).withName( "Admin" );
+
 
         new DrawerBuilder()
                 .withActivity( this )
@@ -95,7 +97,8 @@ public class MapsActivity extends AppCompatActivity {
                         item2,
                         item3,
                         item4,
-                        item5
+                        item5,
+                        item6
 
                 )
                 .withOnDrawerItemClickListener( new Drawer.OnDrawerItemClickListener() {
@@ -131,6 +134,10 @@ public class MapsActivity extends AppCompatActivity {
                                 case 5:
                                     fragment = new configuracion();
                                    // Toast.makeText( MapsActivity.this, "quinto contenido", Toast.LENGTH_LONG ).show();
+                                    break;
+                                case 6:
+                                    fragment = new admin();
+                                    // Toast.makeText( MapsActivity.this, "quinto contenido", Toast.LENGTH_LONG ).show();
                                     break;
                             }
 

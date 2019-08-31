@@ -104,13 +104,14 @@ public class mapa extends Fragment implements OnMapReadyCallback, GoogleMap.OnMy
             return;
         }
         mMap.setMyLocationEnabled( true );
-        mDatabase.child("tachos").addValueEventListener(new ValueEventListener() {
+        mDatabase.child("Tachos").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
                 for(Marker marker:realTimeMarkers){
                     marker.remove();
                 }
+
 
                 for(DataSnapshot snapshot: dataSnapshot.getChildren()){
 
