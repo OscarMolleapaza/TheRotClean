@@ -40,6 +40,8 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
+import static android.webkit.ConsoleMessage.MessageLevel.LOG;
+
 
 /**
  * A simple {@link Fragment} subclass.
@@ -122,6 +124,12 @@ public class mapa extends Fragment implements OnMapReadyCallback, GoogleMap.OnMy
                     markerOptions.position(new LatLng(latitud,longitud));
                     markerOptions.icon( BitmapDescriptorFactory.fromResource(R.mipmap.tacho_general));
                     markerOptions.title("Be Clean, with RotClean");
+
+                    //Log.d("Latitud:",""+tachos.getLatitud());
+                    //Log.d("Longitud:",""+tachos.getLongitud());
+
+
+
                     tmpRealTimeMarkers.add(mMap.addMarker(markerOptions));
                 }
                 realTimeMarkers.clear();
