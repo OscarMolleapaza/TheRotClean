@@ -114,10 +114,10 @@ public class mapa extends Fragment implements OnMapReadyCallback, GoogleMap.OnMy
                     markerOptions.icon( BitmapDescriptorFactory.fromResource(R.mipmap.tacho_general));
 
                     if(tachos.getTipoTacho().equals("Tacho")){
-                        markerOptions.icon( BitmapDescriptorFactory.fromResource(R.drawable.basuraazul));
+                        markerOptions.icon( BitmapDescriptorFactory.fromResource(R.mipmap.tacho_general));
 
                     } else if (tachos.getTipoTacho().equals("Contenedor")){
-                        markerOptions.icon( BitmapDescriptorFactory.fromResource(R.drawable.basuraverde));
+                        markerOptions.icon( BitmapDescriptorFactory.fromResource(R.mipmap.tacho_azul));
 
                     }
 
