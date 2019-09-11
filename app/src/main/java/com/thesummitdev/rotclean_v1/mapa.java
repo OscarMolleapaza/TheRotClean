@@ -1,6 +1,5 @@
 package com.thesummitdev.rotclean_v1;
 
-
 import android.Manifest;
 import android.content.pm.PackageManager;
 import android.location.Location;
@@ -11,13 +10,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
-
 import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
-
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
@@ -37,10 +34,10 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-
 import java.util.ArrayList;
-
-import static android.webkit.ConsoleMessage.MessageLevel.LOG;
+import java.util.HashMap;
+import java.util.Map;
+import static androidx.constraintlayout.widget.Constraints.TAG;
 
 
 /**
@@ -56,8 +53,8 @@ public class mapa extends Fragment implements OnMapReadyCallback, GoogleMap.OnMy
     LocationCallback locationCallback; //ACtualizar posicion
     Location location;
 
-    private ArrayList<Marker> tmpRealTimeMarkers = new ArrayList<>(); //Array Marcadores temporales de almacenamiento para hacer llamado
-    private ArrayList<Marker> realTimeMarkers = new ArrayList<>();     //Marcadores tiempo real
+    //private ArrayList<Marker> tmpRealTimeMarkers = new ArrayList<>(); //Array Marcadores temporales de almacenamiento para hacer llamado
+    //private ArrayList<Marker> realTimeMarkers = new ArrayList<>(); //Marcadores tiempo real (ESTA VARIABLE SE USARÁ PARA ALMACENAR LOS MARCADORES EN LA MEMORIA INTERNA)
 
     public mapa() {
         // Required empty public constructor
@@ -66,8 +63,6 @@ public class mapa extends Fragment implements OnMapReadyCallback, GoogleMap.OnMy
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated( savedInstanceState );
-
-
     }
 
     @Override
@@ -108,32 +103,45 @@ public class mapa extends Fragment implements OnMapReadyCallback, GoogleMap.OnMy
         mMap.setMyLocationEnabled( true );
         mDatabase.child("Tachos").addValueEventListener(new ValueEventListener() {
             @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-
-                for(Marker marker:realTimeMarkers){
-                    marker.remove();
-                }
-
+            public void onDataChange(@NonNull final DataSnapshot dataSnapshot) {
 
                 for(DataSnapshot snapshot: dataSnapshot.getChildren()){
 
-                    Tachos tachos= snapshot.getValue(Tachos.class);
-                    Double latitud = tachos.getLatitud();
-                    Double longitud = tachos.getLongitud();
+                    Tachos tachos = snapshot.getValue(Tachos.class);
+
                     MarkerOptions markerOptions = new MarkerOptions();
-                    markerOptions.position(new LatLng(latitud,longitud));
+                    markerOptions.position(new LatLng(tachos.getLatitud(),tachos.getLongitud()));
                     markerOptions.icon( BitmapDescriptorFactory.fromResource(R.mipmap.tacho_general));
-                    markerOptions.title("Be Clean, with RotClean");
 
-                    //Log.d("Latitud:",""+tachos.getLatitud());
-                    //Log.d("Longitud:",""+tachos.getLongitud());
+                    if(tachos.getTipoTacho().equals("Tacho")){
+                        markerOptions.icon( BitmapDescriptorFactory.fromResource(R.drawable.basuraazul));
 
+                    } else if (tachos.getTipoTacho().equals("Contenedor")){
+                        markerOptions.icon( BitmapDescriptorFactory.fromResource(R.drawable.basuraverde));
 
+                    }
 
-                    tmpRealTimeMarkers.add(mMap.addMarker(markerOptions));
+                    //tmpRealTimeMarkers.clear();
+                    //tmpRealTimeMarkers.add(mMap.addMarker(markerOptions));
+
+                    Marker m = mMap.addMarker(markerOptions);
+                    m.setTag(tachos); //Añadimos los datos del contenedor al respectivo marcador.
+
+                    mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() { //Capturamos el evento CLICK de un marcador.
+                        @Override
+                        public boolean onMarkerClick(Marker marker){ //Obtenemos el marcador seleccionado.
+
+                            Tachos infoTacho = (Tachos) marker.getTag(); //Accedemos a los datos del marcador.
+                            LatLng latLng = new LatLng(marker.getPosition().latitude, marker.getPosition().longitude);
+                            mMap.animateCamera(CameraUpdateFactory.newLatLng(latLng)); //Situamos el mapa según la posición del marcador.
+
+                            new DialogoContenedor(getContext(),""+infoTacho.getTipoTacho(),""+infoTacho.getLugarDistrito(),""+infoTacho.getComentario(), ""+infoTacho.getImagenbase64());
+                            return true; //Creamos el diálogo pasando los datos.
+                        }
+                    });
                 }
-                realTimeMarkers.clear();
-                realTimeMarkers.addAll(tmpRealTimeMarkers);
+                //realTimeMarkers.clear();
+                //realTimeMarkers.addAll(tmpRealTimeMarkers);
             }
 
             @Override
@@ -172,7 +180,6 @@ public class mapa extends Fragment implements OnMapReadyCallback, GoogleMap.OnMy
                     public void onSuccess(Location location) {
                         //OBTENER ULTIMA UBICACION DEL DISPOSITIVO
                         if (location != null) {
-
 
                         }
                         mMap.animateCamera( CameraUpdateFactory.newLatLngZoom(new LatLng(location.getLatitude(),location.getLongitude()),15.0f));

@@ -6,6 +6,15 @@
     <color name="white">#FFFF</color>
     <color name="transparent">#00000000</color>
 
+    <color name="colorGreenLight">#70e078</color>
+    <color name="colorGreenDark">#1b7d23</color>
+
+    <color name="colorRedLight">#e06060</color>
+    <color name="colorRedDark">#d13030</color>
+
+    <color name="colorYellowLight">#fcff9e</color>
+    <color name="colorYellowDark">#e8e81a</color>
+
     <color name="gradientStart">#1A758B</color>
     <color name="gradientStop">#165160</color>
 
