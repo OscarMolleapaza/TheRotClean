@@ -29,5 +29,5 @@ public class Tachos {
     public String getImagenbase64() {
         return imagenbase64;
     }
-
+    public String getTachoID() { return tachoID; }
 }

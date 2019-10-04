@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Rotclean</string>
+    <string name="app_name">CiliApp</string>
     <string name="title_activity_maps">Rotclean</string>
 
     <string name="afirmative">Yes</string>
@@ -9,7 +9,7 @@
     <string name="lon">Length:</string>
     <string name="reg_tacho">Register Container</string>
     <string name="desc">Description:</string>
-    <string name="desc_rot">RotClean is an application that helps people to find the location of garbage collectors to improve the management of solid waste, cleaning services and recycling points, with the collaboration of Rotary Club Internacional and developed by The Summit Developers.</string>
+    <string name="desc_rot">CiliApp es una aplicación que ayuda a las personas a encontrar la ubicación de los recolectores de basura para mejorar la gestión de residuos sólidos, servicios de limpieza y puntos de reciclaje, con la colaboración de los Municipios Distritales y desarrollado por The Summit Developers.</string>
     <string name="correo">Mail:</string>
     <string name="telefono">Cellphone:</string>
     <string name="version">Version:</string>
@@ -25,10 +25,6 @@
     <string name="fecha_lanzamiento">January 31, 2019</string>
     <string name="about">About:</string>
     <string name="about_desc">We are a software development company that aims to improve processes in any industry, through ideas and projects innovators using web and mobile technologies hosted in the cloud.</string>
-
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="title_activity_register">Register</string>
 
 
 </resources>

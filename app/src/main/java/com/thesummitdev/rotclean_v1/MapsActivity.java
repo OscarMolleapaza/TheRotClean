@@ -1,6 +1,7 @@
 package com.thesummitdev.rotclean_v1;
 
 import android.Manifest;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
@@ -14,6 +15,7 @@ import android.view.WindowManager;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
@@ -54,13 +56,13 @@ public class MapsActivity extends AppCompatActivity {
 
     private final int LOCATION = 1;
     //summit123  alias : newkeyrotclean
-
+    public static final int MY_PERMISSIONS_REQUEST_LOCATION = 99;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate( savedInstanceState );
-
+        checkLocationPermission();
 
         if (Build.VERSION.SDK_INT > 16) {
             getWindow().setFlags( WindowManager.LayoutParams.FLAG_FULLSCREEN,
@@ -81,12 +83,12 @@ public class MapsActivity extends AppCompatActivity {
         }
 
         setContentView( R.layout.activity_maps );
-        PrimaryDrawerItem item1 = new PrimaryDrawerItem().withIdentifier( 1 ).withIcon( R.drawable.ic_map_ligh ).withName( "Mapa" );
-        PrimaryDrawerItem item2 = new PrimaryDrawerItem().withIdentifier( 2 ).withIcon( R.drawable.ic_informacion ).withName( "Contenedores" );
-        PrimaryDrawerItem item3 = new PrimaryDrawerItem().withIdentifier( 3 ).withIcon( R.drawable.ic_donation ).withName( "Distritos Disponibles" );
-        PrimaryDrawerItem item4 = new PrimaryDrawerItem().withIdentifier( 4 ).withIcon( R.drawable.ic_acerca ).withName( "En Desarrollo" );
-        PrimaryDrawerItem item5 = new PrimaryDrawerItem().withIdentifier( 5 ).withIcon( R.drawable.ic_settingsajuestes ).withName( "Sobre Nosotros" );
-        PrimaryDrawerItem item6 = new PrimaryDrawerItem().withIdentifier( 6 ).withIcon( R.drawable.ic_menu_share ).withName( "Admin" );
+        PrimaryDrawerItem item1 = new PrimaryDrawerItem().withIdentifier( 1 ).withIcon( R.drawable.ic_map_ligh ).withName( "Mapa" ); //MAPA
+        PrimaryDrawerItem item2 = new PrimaryDrawerItem().withIdentifier( 2 ).withIcon( R.mipmap.district).withName( "Distritos" ); //Distritos
+        PrimaryDrawerItem item3 = new PrimaryDrawerItem().withIdentifier( 3 ).withIcon( R.drawable.ic_acerca ).withName( "Sugerencias" ); //Sugerencias
+        PrimaryDrawerItem item4 = new PrimaryDrawerItem().withIdentifier( 4 ).withIcon( R.drawable.ic_informacion ).withName( "Creditos" );     //Creditos
+        PrimaryDrawerItem item5 = new PrimaryDrawerItem().withIdentifier( 5 ).withIcon( R.mipmap.comments).withName( "Comentarios" ); //Comentarios
+        PrimaryDrawerItem item6 = new PrimaryDrawerItem().withIdentifier( 6 ).withIcon( R.drawable.ic_menu_share ).withName( "Admin" ); //ADMIN
 
 
         new DrawerBuilder()
@@ -114,30 +116,29 @@ public class MapsActivity extends AppCompatActivity {
 
 
                                     fragment = new mapa();
-                                   // Toast.makeText( MapsActivity.this, "uno contenido", Toast.LENGTH_LONG ).show();
-                                    //ir a otro fragment
+                                   // Mapa
                                     break;
                                 case 2:
 
-                                    fragment = new informacion();
-                                  //  Toast.makeText( MapsActivity.this, "dos contenido", Toast.LENGTH_LONG ).show();
+                                    fragment = new Distritos();
+                                  //  Distritos
                                     break;
                                 case 3:
 
-                                    fragment = new donaciones();
-                                   // Toast.makeText( MapsActivity.this, "tres contenido", Toast.LENGTH_LONG ).show();
+                                    fragment = new sugerencias();
+                                   // Sugerencias
                                     break;
                                 case 4:
                                     fragment = new creditos();
-                                    //Toast.makeText( MapsActivity.this, "cuatro contenido", Toast.LENGTH_LONG ).show();
+                                    //Creditos
                                     break;
                                 case 5:
-                                    fragment = new configuracion();
-                                   // Toast.makeText( MapsActivity.this, "quinto contenido", Toast.LENGTH_LONG ).show();
+                                    fragment = new Comentarios();
+                                   // comentarios
                                     break;
                                 case 6:
                                     fragment = new admin();
-                                    // Toast.makeText( MapsActivity.this, "quinto contenido", Toast.LENGTH_LONG ).show();
+                                    // admin
                                     break;
                             }
 
@@ -169,6 +170,7 @@ public class MapsActivity extends AppCompatActivity {
                 int result2 = grantResults[1];
                 if (permission.equals( Manifest.permission.ACCESS_FINE_LOCATION ) && permission2.equals( Manifest.permission.ACCESS_COARSE_LOCATION )) {
                     if (result == PackageManager.PERMISSION_GRANTED && result2 == PackageManager.PERMISSION_GRANTED) {
+
                         Toast.makeText( MapsActivity.this, "Permiso Activado", Toast.LENGTH_LONG );
 
                     } else {
@@ -179,6 +181,46 @@ public class MapsActivity extends AppCompatActivity {
 
             default:
                 super.onRequestPermissionsResult( requestCode, permissions, grantResults );
+        }
+    }
+
+    public boolean checkLocationPermission() {
+        if (ContextCompat.checkSelfPermission(this,
+                Manifest.permission.ACCESS_FINE_LOCATION)
+                != PackageManager.PERMISSION_GRANTED) {
+
+            // Should we show an explanation?
+            if (ActivityCompat.shouldShowRequestPermissionRationale(this,
+                    Manifest.permission.ACCESS_FINE_LOCATION)) {
+
+                // Show an explanation to the user *asynchronously* -- don't block
+                // this thread waiting for the user's response! After the user
+                // sees the explanation, try again to request the permission.
+                new AlertDialog.Builder(this)
+                        .setTitle("Permiso")
+                        .setMessage("Neceistamos permiso xd")
+                        .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                //Prompt the user once explanation has been shown
+                                ActivityCompat.requestPermissions(MapsActivity.this,
+                                        new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                                        MY_PERMISSIONS_REQUEST_LOCATION);
+                            }
+                        })
+                        .create()
+                        .show();
+
+
+            } else {
+                // No explanation needed, we can request the permission.
+                ActivityCompat.requestPermissions(this,
+                        new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                        MY_PERMISSIONS_REQUEST_LOCATION);
+            }
+            return false;
+        } else {
+            return true;
         }
     }
 }

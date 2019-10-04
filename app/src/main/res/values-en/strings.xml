@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">RotClean</string>
+    <string name="app_name">CiliApp</string>
     <string name="afirmative">Yes</string>
     <string name="negative">No</string>
     <string name="lat">Latitude:</string>

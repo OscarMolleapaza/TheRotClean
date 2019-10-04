@@ -13,10 +13,10 @@ import android.view.ViewGroup;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class donaciones extends Fragment {
+public class Distritos extends Fragment {
 
 
-    public donaciones() {
+    public Distritos() {
         // Required empty public constructor
     }
 
@@ -25,7 +25,7 @@ public class donaciones extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate( R.layout.fragment_donaciones, container, false );
+        return inflater.inflate(R.layout.fragment_distritos, container, false);
     }
 
 }

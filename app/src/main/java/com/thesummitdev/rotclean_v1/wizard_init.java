@@ -24,8 +24,9 @@ public class wizard_init extends AppIntro {
         SliderPage sliderPage1 = new SliderPage();
         sliderPage1.setTitle("Hola Somos The Summit Developers!");
         sliderPage1.setDescription("Acompañanos en este pequeño Tutorial.");
-        sliderPage1.setImageDrawable(R.drawable.summit);
-        sliderPage1.setBgColor( Color.TRANSPARENT);
+        sliderPage1.setImageDrawable(R.drawable.summitblanco1);
+        //sliderPage1.setBgColor( Color.TRANSPARENT);
+        sliderPage1.setBgColor(Color.BLUE);
         addSlide( AppIntroFragment.newInstance(sliderPage1));
         //setContentView( R.layout.activity_wizard_init );
         SliderPage sliderPage2 = new SliderPage();
@@ -36,16 +37,16 @@ public class wizard_init extends AppIntro {
         addSlide(AppIntroFragment.newInstance(sliderPage2));
 
         SliderPage sliderPage3 = new SliderPage();
-        sliderPage3.setTitle("Mas opciones");
-        sliderPage3.setDescription("Desliza este boton y encuentra estas opciones.");
+        sliderPage3.setTitle("Sugiere un Contenedor");
+        sliderPage3.setDescription("Puedes sugerir un contenedor cerca a tu area.");
         sliderPage3.setImageDrawable(R.drawable.menu);
-        sliderPage3.setBgColor(Color.TRANSPARENT);
+        sliderPage3.setBgColor(Color.RED);
         addSlide(AppIntroFragment.newInstance(sliderPage3));
 
         SliderPage sliderPage4 = new SliderPage();
-        sliderPage4.setTitle("Conocenos");
-        sliderPage4.setDescription("Veremos informacion de la empresa y donaciones!! ayudanos a mejorar.");
-        sliderPage4.setImageDrawable(R.drawable.creditos);
+        sliderPage4.setTitle("Reporta un Contenedor");
+        sliderPage4.setDescription("Puedes reportar un Contenedor dependiendo de su estado.");
+        sliderPage4.setImageDrawable(R.drawable.screen_reporte);
         sliderPage4.setBgColor(Color.TRANSPARENT);
         addSlide(AppIntroFragment.newInstance(sliderPage4));
         askForPermissions(new String[]{Manifest.permission.ACCESS_COARSE_LOCATION}, 2);

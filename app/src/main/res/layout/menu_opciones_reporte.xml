@@ -41,7 +41,7 @@
 
         <TextView
             android:id="@+id/opcion2"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="#ffffff"
             android:gravity="center"
@@ -50,6 +50,20 @@
             android:paddingRight="2dp"
             android:paddingBottom="10dp"
             android:text="El contenedor está en mal estado."
+            android:textColor="#000000"
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/opcion3"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="#ffffff"
+            android:gravity="center"
+            android:paddingLeft="2dp"
+            android:paddingTop="5dp"
+            android:paddingRight="2dp"
+            android:paddingBottom="10dp"
+            android:text="El contenedor está colapsado."
             android:textColor="#000000"
             android:textSize="16sp" />
 

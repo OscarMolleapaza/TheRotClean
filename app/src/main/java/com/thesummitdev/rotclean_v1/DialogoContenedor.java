@@ -24,7 +24,7 @@ public class DialogoContenedor {
     ImageView imgFoto;
     TextView lblTipo, lblDistrito, lblComentario;
 
-    public DialogoContenedor(final Context context, String tipo, String distrito, String comentario, String urlImagen){
+    public DialogoContenedor(final Context context, String idTacho, final String tipo, String distrito, String comentario, String urlImagen, final Double latitud, final Double longitud){
         final Dialog dialogo = new Dialog(context);
         dialogo.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialogo.setCancelable(true);
@@ -67,7 +67,7 @@ public class DialogoContenedor {
         btnReport.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
-                new MenuOpciones(context);
+                new MenuOpciones(context, tipo,latitud,longitud);
             }
         });
     }

@@ -51,6 +51,8 @@ public class admin extends Fragment {
         txtContraseña = view.findViewById(R.id.txtContraseña);
         btnIngresar = view.findViewById(R.id.btnIngresar);
 
+
+
         btnIngresar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -110,5 +112,4 @@ public class admin extends Fragment {
                     }
                 });
     }
-
 }

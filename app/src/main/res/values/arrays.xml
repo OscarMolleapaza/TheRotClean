@@ -6,7 +6,10 @@
         <item>colaborador</item>
     </string-array>
     <string-array name="lugares_tacho">
-        <item>yanahuara</item>
-        <item>arequipa</item>
-    </string-array>
+        <item>Jose Luis Bustamante y Rivero</item>
+        <item>Yanahuara</item>
+        <item>Paucarpata</item>
+        <item>Socabaya</item>
+        <item>Cayma</item>
+        <item>Hunter</item></string-array>
 </resources>
