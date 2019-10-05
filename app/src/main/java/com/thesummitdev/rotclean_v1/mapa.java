@@ -4,6 +4,7 @@ import android.Manifest;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationListener;
@@ -76,6 +77,7 @@ public class mapa extends Fragment implements OnMapReadyCallback, GoogleMap.OnMy
         // Required empty public constructor
     }
 
+
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
@@ -89,7 +91,6 @@ public class mapa extends Fragment implements OnMapReadyCallback, GoogleMap.OnMy
         mapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map);
 
         locationManager = (LocationManager)getContext().getSystemService(Context.LOCATION_SERVICE);
-
         if (mapFragment == null) {
             FragmentManager fm = getFragmentManager();
             FragmentTransaction ft = fm.beginTransaction();
@@ -120,7 +121,7 @@ public class mapa extends Fragment implements OnMapReadyCallback, GoogleMap.OnMy
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
-        checkLocationPermission();
+        //checkLocationPermission();
         mMap = googleMap;
         mMap.isMyLocationEnabled();
         if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
@@ -378,6 +379,7 @@ public class mapa extends Fragment implements OnMapReadyCallback, GoogleMap.OnMy
         ft.detach(mapa.this).attach(mapa.this).commit();
 
     }
+
 
 
 }

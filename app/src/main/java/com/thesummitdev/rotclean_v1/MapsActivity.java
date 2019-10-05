@@ -71,16 +71,17 @@ public class MapsActivity extends AppCompatActivity {
         /*if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             requestPermissions( new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION}, LOCATION );
         }*/
-        SharedPreferences settings = getSharedPreferences( "prefs", 0 );
-        boolean firstRun = settings.getBoolean( "firstRun", false );
-        if (firstRun == false) {
-            SharedPreferences.Editor editor = settings.edit();
-            editor.putBoolean( "firstRun", true );
-            editor.commit();
-
-            Intent i = new Intent( MapsActivity.this, wizard_init.class );
-            startActivity( i );
-        }
+//        SharedPreferences settings = getSharedPreferences( "prefs", 0 );
+//        boolean firstRun = settings.getBoolean( "firstRun", false );
+//        if (firstRun == false) {
+//            SharedPreferences.Editor editor = settings.edit();
+//            editor.putBoolean( "firstRun", true );
+//            editor.commit();
+//
+//            Intent i = new Intent( MapsActivity.this, wizard_init.class );
+//            startActivity( i );
+//
+//        }
 
         setContentView( R.layout.activity_maps );
         PrimaryDrawerItem item1 = new PrimaryDrawerItem().withIdentifier( 1 ).withIcon( R.drawable.ic_map_ligh ).withName( "Mapa" ); //MAPA

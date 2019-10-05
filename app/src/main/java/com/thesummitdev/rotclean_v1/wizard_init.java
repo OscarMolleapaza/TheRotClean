@@ -2,12 +2,15 @@ package com.thesummitdev.rotclean_v1;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.WindowManager;
 
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 
 import com.github.paolorotolo.appintro.AppIntro;
 import com.github.paolorotolo.appintro.AppIntroFragment;
@@ -15,13 +18,21 @@ import com.github.paolorotolo.appintro.model.SliderPage;
 
 public class wizard_init extends AppIntro {
 
-
+    SharedPreferences settings;
+    boolean firstRun;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate( savedInstanceState );
         if (Build.VERSION.SDK_INT > 16) {
             getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                     WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        }
+         settings = getSharedPreferences( "prefs", 0 );
+         firstRun = settings.getBoolean( "firstRun", false );
+        if (firstRun == true) {
+            Intent i = new Intent( getApplicationContext(), MapsActivity.class );
+            startActivity( i );
+
         }
         SliderPage sliderPage1 = new SliderPage();
         sliderPage1.setTitle("Hola Somos The Summit Developers!");
@@ -51,16 +62,21 @@ public class wizard_init extends AppIntro {
         sliderPage4.setImageDrawable(R.drawable.screen_reporte);
         sliderPage4.setBgColor(Color.parseColor("#309913"));
         addSlide(AppIntroFragment.newInstance(sliderPage4));
-
+        askForPermissions(new String[]{Manifest.permission.ACCESS_COARSE_LOCATION}, 1);
 
     }
 
     @Override
     public void onSkipPressed(Fragment currentFragment) {
         super.onSkipPressed(currentFragment);
-               /* Intent intent = new Intent(wizard_init.this,MapsActivity.class);
-                startActivity(intent);*/
-               finish();
+
+        SharedPreferences.Editor editor = settings.edit();
+        editor.putBoolean( "firstRun", true );
+        editor.commit();
+                Intent intent = new Intent(wizard_init.this,MapsActivity.class);
+                startActivity(intent);
+
+             //  finish();
 
                //prueba commit
     }
@@ -68,7 +84,13 @@ public class wizard_init extends AppIntro {
     @Override
     public void onDonePressed(Fragment currentFragment) {
         super.onDonePressed(currentFragment);
-        finish();
+        SharedPreferences.Editor editor = settings.edit();
+        editor.putBoolean( "firstRun", true );
+        editor.commit();
+        Intent intent = new Intent(wizard_init.this,MapsActivity.class);
+        startActivity(intent);
+        //finish();
+
 
     }
 }
