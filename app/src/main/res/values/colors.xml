@@ -19,4 +19,8 @@
     <color name="gradientStop">#165160</color>
 
     <color name="colorGreen">#1A758B</color>
+
+    <color name="colorinicial">#1A758B</color>
+    <color name="colorfinal">#165160</color>
+
 </resources>

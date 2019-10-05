@@ -8,6 +8,7 @@ import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Looper;
 import android.util.Log;
@@ -19,6 +20,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
@@ -53,7 +55,7 @@ import static androidx.constraintlayout.widget.Constraints.TAG;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class mapa extends Fragment implements OnMapReadyCallback, GoogleMap.OnMyLocationClickListener, GoogleMap.OnMyLocationButtonClickListener, ActivityCompat.OnRequestPermissionsResultCallback,LocationListener {
+public class mapa extends Fragment implements OnMapReadyCallback, GoogleMap.OnMyLocationClickListener, GoogleMap.OnMyLocationButtonClickListener,LocationListener {
 
     private GoogleMap mMap;
     SupportMapFragment mapFragment;
@@ -62,7 +64,9 @@ public class mapa extends Fragment implements OnMapReadyCallback, GoogleMap.OnMy
     LocationRequest locationRequest; //Actualizar posicion
     LocationCallback locationCallback; //ACtualizar posicion
     Location location;
+    public final int LOCATION = 1;
 
+    public static final int MY_PERMISSIONS_REQUEST_LOCATION = 99;
     LocationManager locationManager;
 
     //private ArrayList<Marker> tmpRealTimeMarkers = new ArrayList<>(); //Array Marcadores temporales de almacenamiento para hacer llamado
@@ -80,6 +84,7 @@ public class mapa extends Fragment implements OnMapReadyCallback, GoogleMap.OnMy
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
         View view = inflater.inflate(R.layout.fragment_mapa, container, false);
         mapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map);
 
@@ -115,11 +120,14 @@ public class mapa extends Fragment implements OnMapReadyCallback, GoogleMap.OnMy
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
+        checkLocationPermission();
         mMap = googleMap;
         mMap.isMyLocationEnabled();
         if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             return;
         }
+
+
         mMap.setMyLocationEnabled(true);
         mDatabase.child("Tachos").addValueEventListener(new ValueEventListener() {
             @Override
@@ -305,4 +313,71 @@ public class mapa extends Fragment implements OnMapReadyCallback, GoogleMap.OnMy
     public void onProviderDisabled(String s) {
 
     }
+
+    public boolean checkLocationPermission() {
+        if (ContextCompat.checkSelfPermission(getContext(),
+                Manifest.permission.ACCESS_FINE_LOCATION)
+                != PackageManager.PERMISSION_GRANTED) {
+
+            // Should we show an explanation?
+            if (ActivityCompat.shouldShowRequestPermissionRationale(getActivity(),
+                    Manifest.permission.ACCESS_FINE_LOCATION)) {
+
+                // Show an explanation to the user *asynchronously* -- don't block
+                // this thread waiting for the user's response! After the user
+                // sees the explanation, try again to request the permission.
+                new AlertDialog.Builder(getContext())
+                        .setTitle("Permiso")
+                        .setMessage("Necesitamos permiso para acceder a su ubicacion.")
+                        .setPositiveButton("Aceptar", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                //Prompt the user once explanation has been shown
+                                ActivityCompat.requestPermissions(getActivity(),
+                                        new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                                        MY_PERMISSIONS_REQUEST_LOCATION);
+
+                                Toast.makeText( getContext(),"Funcionamiento gps con normalidad" ,Toast.LENGTH_SHORT).show();
+                                FragmentTransaction ft = getFragmentManager().beginTransaction();
+                                if (Build.VERSION.SDK_INT >= 26) {
+                                    ft.setReorderingAllowed(false);
+                                }
+                                ft.detach(mapa.this).attach(mapa.this).commit();
+
+
+
+                            }
+                        })
+                        .setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                Toast.makeText(getContext(),"Como chuchas vamos a ver tu ubicacion entonces, me vale madres igual, lo tomare como un si",Toast.LENGTH_LONG).show();
+                            }
+                        })
+                        .create()
+                        .show();
+
+
+            } else {
+                // No explanation needed, we can request the permission.
+                ActivityCompat.requestPermissions(getActivity(),
+                        new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                        MY_PERMISSIONS_REQUEST_LOCATION);
+            }
+            return false;
+        } else {
+            return true;
+        }
+    }
+
+    public void Update(){
+        FragmentTransaction ft = getFragmentManager().beginTransaction();
+        if (Build.VERSION.SDK_INT >= 26) {
+            ft.setReorderingAllowed(false);
+        }
+        ft.detach(mapa.this).attach(mapa.this).commit();
+
+    }
+
+
 }

@@ -62,7 +62,7 @@ public class MapsActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate( savedInstanceState );
-        checkLocationPermission();
+        //checkLocationPermission();
 
         if (Build.VERSION.SDK_INT > 16) {
             getWindow().setFlags( WindowManager.LayoutParams.FLAG_FULLSCREEN,
@@ -160,29 +160,6 @@ public class MapsActivity extends AppCompatActivity {
                 .build();
     }
 
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        switch (requestCode) {
-            case LOCATION:
-                String permission = permissions[0];
-                int result = grantResults[0];
-                String permission2 = permissions[1];
-                int result2 = grantResults[1];
-                if (permission.equals( Manifest.permission.ACCESS_FINE_LOCATION ) && permission2.equals( Manifest.permission.ACCESS_COARSE_LOCATION )) {
-                    if (result == PackageManager.PERMISSION_GRANTED && result2 == PackageManager.PERMISSION_GRANTED) {
-
-                        Toast.makeText( MapsActivity.this, "Permiso Activado", Toast.LENGTH_LONG );
-
-                    } else {
-                        Toast.makeText( MapsActivity.this, "Permiso Denegado", Toast.LENGTH_LONG );
-                    }
-                }
-                break;
-
-            default:
-                super.onRequestPermissionsResult( requestCode, permissions, grantResults );
-        }
-    }
 
     public boolean checkLocationPermission() {
         if (ContextCompat.checkSelfPermission(this,
@@ -198,14 +175,22 @@ public class MapsActivity extends AppCompatActivity {
                 // sees the explanation, try again to request the permission.
                 new AlertDialog.Builder(this)
                         .setTitle("Permiso")
-                        .setMessage("Neceistamos permiso xd")
-                        .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                        .setMessage("Necesitamos permiso para acceder a su ubicacion.")
+                        .setPositiveButton("Aceptar", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
                                 //Prompt the user once explanation has been shown
                                 ActivityCompat.requestPermissions(MapsActivity.this,
                                         new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
                                         MY_PERMISSIONS_REQUEST_LOCATION);
+
+
+                            }
+                        })
+                        .setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                Toast.makeText(getApplicationContext(),"Como chuchas vamos a ver tu ubicacion entonces, me vale madres igual lo tomare como un si",Toast.LENGTH_SHORT).show();
                             }
                         })
                         .create()

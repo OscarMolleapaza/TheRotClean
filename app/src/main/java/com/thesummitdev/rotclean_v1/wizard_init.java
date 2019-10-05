@@ -1,6 +1,7 @@
 package com.thesummitdev.rotclean_v1;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
@@ -14,6 +15,7 @@ import com.github.paolorotolo.appintro.model.SliderPage;
 
 public class wizard_init extends AppIntro {
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate( savedInstanceState );
@@ -26,30 +28,30 @@ public class wizard_init extends AppIntro {
         sliderPage1.setDescription("Acompañanos en este pequeño Tutorial.");
         sliderPage1.setImageDrawable(R.drawable.summitblanco1);
         //sliderPage1.setBgColor( Color.TRANSPARENT);
-        sliderPage1.setBgColor(Color.BLUE);
+        sliderPage1.setBgColor(Color.parseColor("#008988"));
         addSlide( AppIntroFragment.newInstance(sliderPage1));
         //setContentView( R.layout.activity_wizard_init );
         SliderPage sliderPage2 = new SliderPage();
         sliderPage2.setTitle("Se parte del cambio");
         sliderPage2.setDescription("Encuentra la ubicacion de un contenedor cerca a tu area.");
         sliderPage2.setImageDrawable(R.drawable.ubicacion);
-        sliderPage2.setBgColor(Color.TRANSPARENT);
+        sliderPage2.setBgColor(Color.parseColor("#231399"));
         addSlide(AppIntroFragment.newInstance(sliderPage2));
 
         SliderPage sliderPage3 = new SliderPage();
         sliderPage3.setTitle("Sugiere un Contenedor");
         sliderPage3.setDescription("Puedes sugerir un contenedor cerca a tu area.");
         sliderPage3.setImageDrawable(R.drawable.menu);
-        sliderPage3.setBgColor(Color.RED);
+        sliderPage3.setBgColor(Color.parseColor("#941399"));
         addSlide(AppIntroFragment.newInstance(sliderPage3));
 
         SliderPage sliderPage4 = new SliderPage();
         sliderPage4.setTitle("Reporta un Contenedor");
         sliderPage4.setDescription("Puedes reportar un Contenedor dependiendo de su estado.");
         sliderPage4.setImageDrawable(R.drawable.screen_reporte);
-        sliderPage4.setBgColor(Color.TRANSPARENT);
+        sliderPage4.setBgColor(Color.parseColor("#309913"));
         addSlide(AppIntroFragment.newInstance(sliderPage4));
-        askForPermissions(new String[]{Manifest.permission.ACCESS_COARSE_LOCATION}, 2);
+
 
     }
 
