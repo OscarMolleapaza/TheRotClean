@@ -60,7 +60,7 @@ import static androidx.constraintlayout.widget.Constraints.TAG;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class mapa extends Fragment implements OnMapReadyCallback, GoogleMap.OnMyLocationClickListener, GoogleMap.OnMyLocationButtonClickListener,LocationListener {
+public class mapa extends Fragment implements OnMapReadyCallback, GoogleMap.OnMyLocationClickListener, GoogleMap.OnMyLocationButtonClickListener, LocationListener {
 
     private GoogleMap mMap;
     SupportMapFragment mapFragment;
@@ -69,11 +69,16 @@ public class mapa extends Fragment implements OnMapReadyCallback, GoogleMap.OnMy
     LocationRequest locationRequest; //Actualizar posicion
     LocationCallback locationCallback; //ACtualizar posicion
     Location location;
+
     public final int LOCATION = 1;
 
     public static final int MY_PERMISSIONS_REQUEST_LOCATION = 99;
     LocationManager locationManager;
 
+    Double latitude;
+    Double longitud;
+
+    public boolean isGPSEnabled = false;
     //private ArrayList<Marker> tmpRealTimeMarkers = new ArrayList<>(); //Array Marcadores temporales de almacenamiento para hacer llamado
     //private ArrayList<Marker> realTimeMarkers = new ArrayList<>(); //Marcadores tiempo real (ESTA VARIABLE SE USARÁ PARA ALMACENAR LOS MARCADORES EN LA MEMORIA INTERNA)
 
@@ -85,8 +90,8 @@ public class mapa extends Fragment implements OnMapReadyCallback, GoogleMap.OnMy
     @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     public void onAttach(Context context) {
-        //permiso();
-        checkLocationPermission();
+        permiso();
+        //checkLocationPermission();
 
         super.onAttach(context);
 
@@ -101,10 +106,11 @@ public class mapa extends Fragment implements OnMapReadyCallback, GoogleMap.OnMy
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
+        lastPosition();
         View view = inflater.inflate(R.layout.fragment_mapa, container, false);
         mapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map);
 
-        locationManager = (LocationManager)getContext().getSystemService(Context.LOCATION_SERVICE);
+        locationManager = (LocationManager) getContext().getSystemService(Context.LOCATION_SERVICE);
         if (mapFragment == null) {
             FragmentManager fm = getFragmentManager();
             FragmentTransaction ft = fm.beginTransaction();
@@ -117,8 +123,8 @@ public class mapa extends Fragment implements OnMapReadyCallback, GoogleMap.OnMy
 
 
         mDatabase = FirebaseDatabase.getInstance().getReference(); //Instanciar BD Firebase
-        lastPosition();
-      //  initFused();
+        //lastPosition();
+        //  initFused();
         mapFragment.getMapAsync(this);
         return view;
     }
@@ -201,7 +207,7 @@ public class mapa extends Fragment implements OnMapReadyCallback, GoogleMap.OnMy
 
 
         //buildLocationRequest();
-       // buildLocationCallBack();
+        // buildLocationCallBack();
         if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
 
             return;
@@ -210,6 +216,19 @@ public class mapa extends Fragment implements OnMapReadyCallback, GoogleMap.OnMy
         mMap.setOnMyLocationButtonClickListener(this);
         mMap.setOnMyLocationClickListener(this);
 
+    }
+
+    public void lastPositionManager() {
+        if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            return;
+        }
+        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, this);
+        if (location != null) {
+            mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(location.getLatitude(), location.getLongitude()), 15.0f));
+
+        }else{
+            Toast.makeText(getContext(),"No hay location",Toast.LENGTH_SHORT).show();
+        }
     }
 
     private void buildLocationCallBack() {
@@ -249,6 +268,7 @@ public class mapa extends Fragment implements OnMapReadyCallback, GoogleMap.OnMy
         };
     }
 
+
     private void lastPosition() {
         if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             return;
@@ -262,9 +282,14 @@ public class mapa extends Fragment implements OnMapReadyCallback, GoogleMap.OnMy
                             mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(location.getLatitude(), location.getLongitude()), 15.0f));
 
                         }
+                        //mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(latitude, longitud), 15.0f));
+
                     }
                 });
+
     }
+
+
     private void buildLocationRequest(){
         locationRequest = new LocationRequest();
         locationRequest.setPriority( LocationRequest.PRIORITY_HIGH_ACCURACY);
@@ -309,6 +334,8 @@ public class mapa extends Fragment implements OnMapReadyCallback, GoogleMap.OnMy
 
     @Override
     public void onLocationChanged(Location location) {
+        latitude = location.getLatitude();
+        longitud = location.getLongitude();
         //mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(location.getLatitude(), location.getLongitude()), 15.0f));
 
     }
@@ -405,17 +432,14 @@ public class mapa extends Fragment implements OnMapReadyCallback, GoogleMap.OnMy
                         .setMessage("Necesitamos permiso para acceder a su ubicacion.")
                         .setPositiveButton("Aceptar", new DialogInterface.OnClickListener() {
                             @Override
-                            public void onClick(DialogInterface dialogInterface, int a) {
+                            public void onClick(DialogInterface dialogInterface, int i) {
                                 //Prompt the user once explanation has been shown
-                                Toast.makeText(getContext(),"Por favor habilita el permiso",Toast.LENGTH_LONG).show();
-                                final Intent i = new Intent();
-                                i.setAction( Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
-                                i.addCategory(Intent.CATEGORY_DEFAULT);
-                                i.setData( Uri.parse("package:" + getContext().getPackageName()));
-                                i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                                i.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
-                                i.addFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS);
-                                startActivity(i);
+                                ActivityCompat.requestPermissions(getActivity(),
+                                        new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                                        MY_PERMISSIONS_REQUEST_LOCATION);
+
+                                Toast.makeText( getContext(),"Funcionamiento gps con normalidad" ,Toast.LENGTH_SHORT).show();
+                                Update();
                             }
                         })
                         .setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
