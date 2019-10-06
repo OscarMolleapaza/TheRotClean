@@ -1,12 +1,16 @@
 package com.thesummitdev.rotclean_v1;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentSender;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -22,6 +26,7 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
 import androidx.core.app.ActivityCompat;
@@ -30,11 +35,15 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import com.google.android.gms.common.api.ResolvableApiException;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.location.LocationSettingsRequest;
+import com.google.android.gms.location.LocationSettingsResponse;
+import com.google.android.gms.location.SettingsClient;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -43,17 +52,23 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 
+import static android.app.Activity.RESULT_OK;
 import static androidx.constraintlayout.widget.Constraints.TAG;
 
 
@@ -61,7 +76,7 @@ import static androidx.constraintlayout.widget.Constraints.TAG;
  * A simple {@link Fragment} subclass.
  */
 public class mapa extends Fragment implements OnMapReadyCallback, GoogleMap.OnMyLocationClickListener, GoogleMap.OnMyLocationButtonClickListener, LocationListener {
-
+    private final int GPS=51;
     private GoogleMap mMap;
     SupportMapFragment mapFragment;
     private DatabaseReference mDatabase; //FIREBASE
@@ -106,7 +121,7 @@ public class mapa extends Fragment implements OnMapReadyCallback, GoogleMap.OnMy
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        lastPosition();
+        //lastPosition();
         View view = inflater.inflate(R.layout.fragment_mapa, container, false);
         mapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map);
 
@@ -118,8 +133,8 @@ public class mapa extends Fragment implements OnMapReadyCallback, GoogleMap.OnMy
             ft.replace(R.id.map, mapFragment).commit();
 
         }
-
-        fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(getContext());
+        gpsEnable();
+        //fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(getContext());
 
 
         mDatabase = FirebaseDatabase.getInstance().getReference(); //Instanciar BD Firebase
@@ -127,6 +142,36 @@ public class mapa extends Fragment implements OnMapReadyCallback, GoogleMap.OnMy
         //  initFused();
         mapFragment.getMapAsync(this);
         return view;
+    }
+
+    private void gpsEnable() {
+        fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient( getContext() );
+        LocationRequest locationRequest = LocationRequest.create();
+        locationRequest.setInterval( 10000 );
+        locationRequest.setFastestInterval( 5000 );
+        locationRequest.setPriority( locationRequest.PRIORITY_HIGH_ACCURACY );
+        LocationSettingsRequest.Builder builder= new LocationSettingsRequest.Builder().addLocationRequest( locationRequest );
+        SettingsClient settingsClient =LocationServices.getSettingsClient( getActivity() );
+        Task<LocationSettingsResponse> task= settingsClient.checkLocationSettings( builder.build() );
+        task.addOnSuccessListener( new OnSuccessListener<LocationSettingsResponse>() {
+            @Override
+            public void onSuccess(LocationSettingsResponse locationSettingsResponse) {
+                getDeviceLocation();
+            }
+        } );
+        task.addOnFailureListener( new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                if(e instanceof ResolvableApiException){
+                    ResolvableApiException resolvableApiException= (ResolvableApiException) e;
+                    try {
+                        resolvableApiException.startResolutionForResult( getActivity(),GPS );
+                    } catch (IntentSender.SendIntentException e1) {
+                        e1.printStackTrace();
+                    }
+                }
+            }
+        } );
     }
 
     private void initFused() {
@@ -202,7 +247,7 @@ public class mapa extends Fragment implements OnMapReadyCallback, GoogleMap.OnMy
             }
         });
 
-        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, 10, this);
+        //locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, 10, this);
         //locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 1000, 0, this);
 
 
@@ -473,12 +518,68 @@ public class mapa extends Fragment implements OnMapReadyCallback, GoogleMap.OnMy
                     }else{
                         Toast.makeText(getContext(),"Denegaste el permiso",Toast.LENGTH_LONG).show();
                     }
+                }else {
+                    Toast.makeText(getContext(),"Denegaste el permiso x2",Toast.LENGTH_LONG).show();
                 }
         }
 
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
     }
+    @SuppressLint("MissingPermission")
+    private void getDeviceLocation() {
+        fusedLocationProviderClient.getLastLocation()
+                .addOnCompleteListener( new OnCompleteListener<Location>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Location> task) {
+                        if (task.isSuccessful()){
+                            location= task.getResult();
+                            if(location!=null){
+                                mMap.moveCamera( CameraUpdateFactory.newLatLngZoom( new LatLng( location.getLatitude(),location.getLongitude() ),18) );
 
+                            }else {
+                                LocationRequest locationRequest= LocationRequest.create();
+                                locationRequest.setInterval( 10000 );
+                                locationRequest.setFastestInterval( 5000 );
+                                locationRequest.setPriority( LocationRequest.PRIORITY_HIGH_ACCURACY );
+                                locationCallback= new LocationCallback(){
+                                    @Override
+                                    public void onLocationResult(LocationResult locationResult) {
+                                        super.onLocationResult( locationResult );
+                                        if (locationResult==null)
+                                            return;
+                                        location = locationResult.getLastLocation();
 
+                                        mMap.moveCamera( CameraUpdateFactory.newLatLngZoom( new LatLng( location.getLatitude(),location.getLongitude() ),18) );
+
+                                        fusedLocationProviderClient.removeLocationUpdates( locationCallback );
+                                    }
+                                };
+
+                                fusedLocationProviderClient.requestLocationUpdates( locationRequest,locationCallback,null );
+
+                            }
+
+                        }else{
+                            Toast.makeText( getContext(),"Unable to get last lcoation" ,Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                } );
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode,@Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        switch (requestCode) {
+            case GPS:
+                if (resultCode == RESULT_OK) {
+
+                    getDeviceLocation();
+
+                } else {
+                    Toast.makeText(getContext(), "Error de gps", Toast.LENGTH_SHORT).show();
+                }
+                break;
+        }
+    }
 
 }
