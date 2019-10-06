@@ -85,8 +85,11 @@ public class mapa extends Fragment implements OnMapReadyCallback, GoogleMap.OnMy
     @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     public void onAttach(Context context) {
-        permiso();
+        //permiso();
+        checkLocationPermission();
+
         super.onAttach(context);
+
     }
 
     @Override
@@ -132,7 +135,6 @@ public class mapa extends Fragment implements OnMapReadyCallback, GoogleMap.OnMy
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
-        //checkLocationPermission();
         mMap = googleMap;
         mMap.isMyLocationEnabled();
         if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
@@ -350,12 +352,7 @@ public class mapa extends Fragment implements OnMapReadyCallback, GoogleMap.OnMy
                                         MY_PERMISSIONS_REQUEST_LOCATION);
 
                                 Toast.makeText( getContext(),"Funcionamiento gps con normalidad" ,Toast.LENGTH_SHORT).show();
-                                FragmentTransaction ft = getFragmentManager().beginTransaction();
-                                if (Build.VERSION.SDK_INT >= 26) {
-                                    ft.setReorderingAllowed(false);
-                                }
-                                ft.detach(mapa.this).attach(mapa.this).commit();
-
+                                Update();
 
 
                             }
@@ -391,6 +388,8 @@ public class mapa extends Fragment implements OnMapReadyCallback, GoogleMap.OnMy
         ft.detach(mapa.this).attach(mapa.this).commit();
 
     }
+
+
     @TargetApi(Build.VERSION_CODES.M)
     @RequiresApi(api = Build.VERSION_CODES.M)
     public void permiso(){
