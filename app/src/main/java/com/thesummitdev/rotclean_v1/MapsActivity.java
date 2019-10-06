@@ -1,20 +1,24 @@
 package com.thesummitdev.rotclean_v1;
 
 import android.Manifest;
+import android.annotation.TargetApi;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.location.Location;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Looper;
+import android.provider.Settings;
 import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
@@ -59,30 +63,16 @@ public class MapsActivity extends AppCompatActivity {
     public static final int MY_PERMISSIONS_REQUEST_LOCATION = 99;
 
 
+    @TargetApi(Build.VERSION_CODES.M)
+    @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate( savedInstanceState );
-        //checkLocationPermission();
 
         if (Build.VERSION.SDK_INT > 16) {
             getWindow().setFlags( WindowManager.LayoutParams.FLAG_FULLSCREEN,
                     WindowManager.LayoutParams.FLAG_FULLSCREEN );
         }
-        /*if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            requestPermissions( new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION}, LOCATION );
-        }*/
-//        SharedPreferences settings = getSharedPreferences( "prefs", 0 );
-//        boolean firstRun = settings.getBoolean( "firstRun", false );
-//        if (firstRun == false) {
-//            SharedPreferences.Editor editor = settings.edit();
-//            editor.putBoolean( "firstRun", true );
-//            editor.commit();
-//
-//            Intent i = new Intent( MapsActivity.this, wizard_init.class );
-//            startActivity( i );
-//
-//        }
-
         setContentView( R.layout.activity_maps );
         PrimaryDrawerItem item1 = new PrimaryDrawerItem().withIdentifier( 1 ).withIcon( R.drawable.ic_map_ligh ).withName( "Mapa" ); //MAPA
         PrimaryDrawerItem item2 = new PrimaryDrawerItem().withIdentifier( 2 ).withIcon( R.mipmap.district).withName( "Distritos" ); //Distritos
@@ -162,6 +152,7 @@ public class MapsActivity extends AppCompatActivity {
     }
 
 
+
     public boolean checkLocationPermission() {
         if (ContextCompat.checkSelfPermission(this,
                 Manifest.permission.ACCESS_FINE_LOCATION)
@@ -203,10 +194,12 @@ public class MapsActivity extends AppCompatActivity {
                 ActivityCompat.requestPermissions(this,
                         new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
                         MY_PERMISSIONS_REQUEST_LOCATION);
+
             }
             return false;
         } else {
             return true;
         }
     }
+
 }

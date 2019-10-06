@@ -1,6 +1,7 @@
 package com.thesummitdev.rotclean_v1;
 
 import android.Manifest;
+import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -9,9 +10,11 @@ import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Looper;
+import android.provider.Settings;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,6 +22,7 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
@@ -77,6 +81,13 @@ public class mapa extends Fragment implements OnMapReadyCallback, GoogleMap.OnMy
         // Required empty public constructor
     }
 
+    @TargetApi(Build.VERSION_CODES.M)
+    @RequiresApi(api = Build.VERSION_CODES.M)
+    @Override
+    public void onAttach(Context context) {
+        permiso();
+        super.onAttach(context);
+    }
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
@@ -364,6 +375,7 @@ public class mapa extends Fragment implements OnMapReadyCallback, GoogleMap.OnMy
                 ActivityCompat.requestPermissions(getActivity(),
                         new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
                         MY_PERMISSIONS_REQUEST_LOCATION);
+
             }
             return false;
         } else {
@@ -378,6 +390,70 @@ public class mapa extends Fragment implements OnMapReadyCallback, GoogleMap.OnMy
         }
         ft.detach(mapa.this).attach(mapa.this).commit();
 
+    }
+    @TargetApi(Build.VERSION_CODES.M)
+    @RequiresApi(api = Build.VERSION_CODES.M)
+    public void permiso(){
+        if (CheckPermission(Manifest.permission.ACCESS_FINE_LOCATION)){
+
+        }else{
+            //No se le pregunto aun
+            if (!shouldShowRequestPermissionRationale(Manifest.permission.ACCESS_FINE_LOCATION)){
+                requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION},1);
+            }else{
+                new AlertDialog.Builder(getContext())
+                        .setTitle("Permiso")
+                        .setMessage("Necesitamos permiso para acceder a su ubicacion.")
+                        .setPositiveButton("Aceptar", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int a) {
+                                //Prompt the user once explanation has been shown
+                                Toast.makeText(getContext(),"Por favor habilita el permiso",Toast.LENGTH_LONG).show();
+                                final Intent i = new Intent();
+                                i.setAction( Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+                                i.addCategory(Intent.CATEGORY_DEFAULT);
+                                i.setData( Uri.parse("package:" + getContext().getPackageName()));
+                                i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                                i.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+                                i.addFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS);
+                                startActivity(i);
+                            }
+                        })
+                        .setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                Toast.makeText(getContext(),"Como chuchas vamos a ver tu ubicacion entonces, me vale madres igual, lo tomare como un si",Toast.LENGTH_LONG).show();
+                            }
+                        })
+                        .create()
+                        .show();
+
+
+            }
+        }
+    }
+    private boolean CheckPermission(String permiso){
+        int result= getActivity().checkCallingOrSelfPermission(permiso);
+        return result== PackageManager.PERMISSION_GRANTED;
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        switch (requestCode){
+            case 1:
+                String permission= permissions[0];
+                int result= grantResults[0];
+                if(permission.equals(Manifest.permission.ACCESS_FINE_LOCATION)){
+                    if (result==PackageManager.PERMISSION_GRANTED){
+                        if (ActivityCompat.checkSelfPermission(getContext(),Manifest.permission.ACCESS_FINE_LOCATION)!=PackageManager.PERMISSION_GRANTED) return;
+                        Update();
+                    }else{
+                        Toast.makeText(getContext(),"Denegaste el permiso",Toast.LENGTH_LONG).show();
+                    }
+                }
+        }
+
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
     }
 
 

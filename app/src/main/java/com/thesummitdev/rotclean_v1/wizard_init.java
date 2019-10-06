@@ -62,7 +62,6 @@ public class wizard_init extends AppIntro {
         sliderPage4.setImageDrawable(R.drawable.screen_reporte);
         sliderPage4.setBgColor(Color.parseColor("#309913"));
         addSlide(AppIntroFragment.newInstance(sliderPage4));
-        askForPermissions(new String[]{Manifest.permission.ACCESS_COARSE_LOCATION}, 1);
 
     }
 
