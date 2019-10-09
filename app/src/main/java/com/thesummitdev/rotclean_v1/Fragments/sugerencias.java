@@ -1,4 +1,4 @@
-package com.thesummitdev.rotclean_v1;
+package com.thesummitdev.rotclean_v1.Fragments;
 
 
 import android.Manifest;
@@ -34,6 +34,7 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.thesummitdev.rotclean_v1.R;
 
 import java.io.ByteArrayOutputStream;
 import java.lang.reflect.Array;
@@ -77,8 +78,10 @@ public class sugerencias extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
 
+
         mDatabaseReference = FirebaseDatabase.getInstance().getReference();
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(getContext());
+        /*
         view = inflater.inflate(R.layout.fragment_sugerencias,container,false);
         imgFotoSug = view.findViewById(R.id.imgFotoSug);
         txtReferencia = view.findViewById(R.id.txtRefSug);
@@ -105,6 +108,7 @@ public class sugerencias extends Fragment {
                 guardarDatosFirebaseDialogNotDatabase();
             }
         });
+        */
         return view;
     }
     @Override

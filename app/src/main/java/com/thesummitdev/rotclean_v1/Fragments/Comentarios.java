@@ -1,4 +1,4 @@
-package com.thesummitdev.rotclean_v1;
+package com.thesummitdev.rotclean_v1.Fragments;
 
 
 import android.app.AlertDialog;
@@ -22,6 +22,7 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.thesummitdev.rotclean_v1.R;
 
 import java.util.HashMap;
 import java.util.Map;

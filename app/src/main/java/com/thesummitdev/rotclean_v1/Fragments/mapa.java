@@ -1,28 +1,34 @@
-package com.thesummitdev.rotclean_v1;
+package com.thesummitdev.rotclean_v1.Fragments;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
+import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentSender;
-import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
-import android.location.Geocoder;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Looper;
+import android.provider.MediaStore;
 import android.provider.Settings;
-import android.util.Log;
+import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -30,7 +36,6 @@ import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
 import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
@@ -56,26 +61,27 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.thesummitdev.rotclean_v1.DialogoContenedor;
+import com.thesummitdev.rotclean_v1.R;
+import com.thesummitdev.rotclean_v1.Modelos.Tachos;
 
-import java.io.IOException;
-import java.util.ArrayList;
+import java.io.ByteArrayOutputStream;
 import java.util.HashMap;
-import java.util.Locale;
 import java.util.Map;
 
 import static android.app.Activity.RESULT_OK;
-import static androidx.constraintlayout.widget.Constraints.TAG;
 
 
 /**
  * A simple {@link Fragment} subclass.
  */
-public class mapa extends Fragment implements OnMapReadyCallback, GoogleMap.OnMyLocationClickListener, GoogleMap.OnMyLocationButtonClickListener, LocationListener {
+public class mapa extends Fragment implements OnMapReadyCallback, GoogleMap.OnMyLocationClickListener, GoogleMap.OnMyLocationButtonClickListener, LocationListener, View.OnClickListener {
     private final int GPS=51;
     private GoogleMap mMap;
     SupportMapFragment mapFragment;
@@ -85,6 +91,14 @@ public class mapa extends Fragment implements OnMapReadyCallback, GoogleMap.OnMy
     LocationCallback locationCallback; //ACtualizar posicion
     Location location;
 
+    FloatingActionButton sugerir;
+
+    ProgressDialog progressDialog;
+    ImageView imgFotoSug;
+    EditText txtReferencia, txtComentario;
+    Spinner dialog_spinner_sug;
+    Button btnCancel, btnEnviarSug;
+    Bitmap bitmap;
     public final int LOCATION = 1;
 
     public static final int MY_PERMISSIONS_REQUEST_LOCATION = 99;
@@ -92,10 +106,8 @@ public class mapa extends Fragment implements OnMapReadyCallback, GoogleMap.OnMy
 
     Double latitude;
     Double longitud;
-
+    Dialog dialog;
     public boolean isGPSEnabled = false;
-    //private ArrayList<Marker> tmpRealTimeMarkers = new ArrayList<>(); //Array Marcadores temporales de almacenamiento para hacer llamado
-    //private ArrayList<Marker> realTimeMarkers = new ArrayList<>(); //Marcadores tiempo real (ESTA VARIABLE SE USARÁ PARA ALMACENAR LOS MARCADORES EN LA MEMORIA INTERNA)
 
     public mapa() {
         // Required empty public constructor
@@ -106,7 +118,6 @@ public class mapa extends Fragment implements OnMapReadyCallback, GoogleMap.OnMy
     @Override
     public void onAttach(Context context) {
         permiso();
-        //checkLocationPermission();
 
         super.onAttach(context);
 
@@ -121,10 +132,10 @@ public class mapa extends Fragment implements OnMapReadyCallback, GoogleMap.OnMy
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        //lastPosition();
         View view = inflater.inflate(R.layout.fragment_mapa, container, false);
         mapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map);
 
+        sugerir = (FloatingActionButton)view.findViewById(R.id.buttomSugerir);
         locationManager = (LocationManager) getContext().getSystemService(Context.LOCATION_SERVICE);
         if (mapFragment == null) {
             FragmentManager fm = getFragmentManager();
@@ -133,15 +144,13 @@ public class mapa extends Fragment implements OnMapReadyCallback, GoogleMap.OnMy
             ft.replace(R.id.map, mapFragment).commit();
 
         }
+        sugerir.setOnClickListener(this);
+
         gpsEnable();
-        //fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(getContext());
-
-
         mDatabase = FirebaseDatabase.getInstance().getReference(); //Instanciar BD Firebase
-        //lastPosition();
-        //  initFused();
         mapFragment.getMapAsync(this);
         return view;
+
     }
 
     private void gpsEnable() {
@@ -174,15 +183,7 @@ public class mapa extends Fragment implements OnMapReadyCallback, GoogleMap.OnMy
         } );
     }
 
-    private void initFused() {
-        fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(getContext());
-        if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            return;
-        }
-        buildLocationRequest();
-        buildLocationCallBack();
-        fusedLocationProviderClient.requestLocationUpdates(locationRequest, locationCallback, Looper.myLooper());
-    }
+
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
@@ -237,8 +238,6 @@ public class mapa extends Fragment implements OnMapReadyCallback, GoogleMap.OnMy
                         }
                     });
                 }
-                //realTimeMarkers.clear();
-                //realTimeMarkers.addAll(tmpRealTimeMarkers);
             }
 
             @Override
@@ -247,12 +246,6 @@ public class mapa extends Fragment implements OnMapReadyCallback, GoogleMap.OnMy
             }
         });
 
-        //locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, 10, this);
-        //locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 1000, 0, this);
-
-
-        //buildLocationRequest();
-        // buildLocationCallBack();
         if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
 
             return;
@@ -261,109 +254,6 @@ public class mapa extends Fragment implements OnMapReadyCallback, GoogleMap.OnMy
         mMap.setOnMyLocationButtonClickListener(this);
         mMap.setOnMyLocationClickListener(this);
 
-    }
-
-    public void lastPositionManager() {
-        if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            return;
-        }
-        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, this);
-        if (location != null) {
-            mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(location.getLatitude(), location.getLongitude()), 15.0f));
-
-        }else{
-            Toast.makeText(getContext(),"No hay location",Toast.LENGTH_SHORT).show();
-        }
-    }
-
-    private void buildLocationCallBack() {
-
-        Toast.makeText(getContext(), "Entrando", Toast.LENGTH_SHORT).show();
-
-        locationCallback = new LocationCallback() {
-            @Override
-            public void onLocationResult(LocationResult locationResult) {
-                super.onLocationResult(locationResult);
-                location = locationResult.getLocations().get(locationResult.getLocations().size() - 1);
-                Log.e("Location2", "" + location.getLatitude() + "" + location.getLongitude());
-
-                Toast.makeText(getContext(), "onLocationResult", Toast.LENGTH_SHORT).show();
-
-                if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                    return;
-                }
-                fusedLocationProviderClient.getLastLocation().addOnSuccessListener(new OnSuccessListener<Location>() {
-                    @Override
-                    public void onSuccess(Location location) {
-                        //OBTENER ULTIMA UBICACION DEL DISPOSITIVO
-                        if (location != null) {
-
-
-                            Toast.makeText(getContext(), "" + location.getLatitude() + location.getLongitude(), Toast.LENGTH_SHORT).show();
-
-                            mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(location.getLatitude(), location.getLongitude()), 15.0f));
-                        } else {
-                            Toast.makeText(getContext(), "Location Null", Toast.LENGTH_SHORT).show();
-                        }
-
-                    }
-                });
-            }
-
-        };
-    }
-
-
-    private void lastPosition() {
-        if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            return;
-        }
-        fusedLocationProviderClient.getLastLocation()
-                .addOnSuccessListener(getActivity(), new OnSuccessListener<Location>() {
-                    @Override
-                    public void onSuccess(Location location) {
-                        // Got last known location. In some rare situations this can be null.
-                        if (location != null) {
-                            mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(location.getLatitude(), location.getLongitude()), 15.0f));
-
-                        }
-                        //mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(latitude, longitud), 15.0f));
-
-                    }
-                });
-
-    }
-
-
-    private void buildLocationRequest(){
-        locationRequest = new LocationRequest();
-        locationRequest.setPriority( LocationRequest.PRIORITY_HIGH_ACCURACY);
-        locationRequest.setInterval(5000);
-        locationRequest.setFastestInterval(3000);
-        locationRequest.setSmallestDisplacement(10);
-    }
-
-    //Activar GPS
-    private void showGPSDisabledAlertToUser(){
-        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getContext());
-        alertDialogBuilder.setMessage("¿El GPS Esta desactivado, te gustaria activarlo?")
-                .setCancelable(false)
-                .setPositiveButton("Ir a configuración para activar GPS",
-                        new DialogInterface.OnClickListener(){
-                            public void onClick(DialogInterface dialog, int id){
-                                Intent callGPSSettingIntent = new Intent(
-                                        android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS);
-                                startActivity(callGPSSettingIntent);
-                            }
-                        });
-        alertDialogBuilder.setNegativeButton("Cancel",
-                new DialogInterface.OnClickListener(){
-                    public void onClick(DialogInterface dialog, int id){
-                        dialog.cancel();
-                    }
-                });
-        AlertDialog alert = alertDialogBuilder.create();
-        alert.show();
     }
 
     @Override
@@ -381,7 +271,6 @@ public class mapa extends Fragment implements OnMapReadyCallback, GoogleMap.OnMy
     public void onLocationChanged(Location location) {
         latitude = location.getLatitude();
         longitud = location.getLongitude();
-        //mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(location.getLatitude(), location.getLongitude()), 15.0f));
 
     }
 
@@ -400,57 +289,7 @@ public class mapa extends Fragment implements OnMapReadyCallback, GoogleMap.OnMy
 
     }
 
-    public boolean checkLocationPermission() {
-        if (ContextCompat.checkSelfPermission(getContext(),
-                Manifest.permission.ACCESS_FINE_LOCATION)
-                != PackageManager.PERMISSION_GRANTED) {
 
-            // Should we show an explanation?
-            if (ActivityCompat.shouldShowRequestPermissionRationale(getActivity(),
-                    Manifest.permission.ACCESS_FINE_LOCATION)) {
-
-                // Show an explanation to the user *asynchronously* -- don't block
-                // this thread waiting for the user's response! After the user
-                // sees the explanation, try again to request the permission.
-                new AlertDialog.Builder(getContext())
-                        .setTitle("Permiso")
-                        .setMessage("Necesitamos permiso para acceder a su ubicacion.")
-                        .setPositiveButton("Aceptar", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialogInterface, int i) {
-                                //Prompt the user once explanation has been shown
-                                ActivityCompat.requestPermissions(getActivity(),
-                                        new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
-                                        MY_PERMISSIONS_REQUEST_LOCATION);
-
-                                Toast.makeText( getContext(),"Funcionamiento gps con normalidad" ,Toast.LENGTH_SHORT).show();
-                                Update();
-
-
-                            }
-                        })
-                        .setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialogInterface, int i) {
-                                Toast.makeText(getContext(),"Como chuchas vamos a ver tu ubicacion entonces, me vale madres igual, lo tomare como un si",Toast.LENGTH_LONG).show();
-                            }
-                        })
-                        .create()
-                        .show();
-
-
-            } else {
-                // No explanation needed, we can request the permission.
-                ActivityCompat.requestPermissions(getActivity(),
-                        new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
-                        MY_PERMISSIONS_REQUEST_LOCATION);
-
-            }
-            return false;
-        } else {
-            return true;
-        }
-    }
 
     public void Update(){
         FragmentTransaction ft = getFragmentManager().beginTransaction();
@@ -541,6 +380,7 @@ public class mapa extends Fragment implements OnMapReadyCallback, GoogleMap.OnMy
                                 locationRequest.setInterval( 10000 );
                                 locationRequest.setFastestInterval( 5000 );
                                 locationRequest.setPriority( LocationRequest.PRIORITY_HIGH_ACCURACY );
+
                                 locationCallback= new LocationCallback(){
                                     @Override
                                     public void onLocationResult(LocationResult locationResult) {
@@ -579,6 +419,103 @@ public class mapa extends Fragment implements OnMapReadyCallback, GoogleMap.OnMy
                     Toast.makeText(getContext(), "Error de gps", Toast.LENGTH_SHORT).show();
                 }
                 break;
+        }
+        if (requestCode==1&&resultCode==RESULT_OK&&data!=null){
+
+            bitmap=(Bitmap) data.getExtras().get( "data" );
+
+            imgFotoSug.setImageBitmap( bitmap );
+        }else {
+            Toast.makeText( getContext(),"Error de data no se obtuvo" ,Toast.LENGTH_SHORT).show();
+        }
+    }
+
+
+    @Override
+    public void onClick(View view) {
+
+        switch (view.getId()){
+
+        case R.id.buttomSugerir:
+            dialog =new Dialog( getContext() );
+            dialog.setContentView( R.layout.dialog_sugerencia );
+            dialog.getWindow().setBackgroundDrawable(new ColorDrawable( Color.TRANSPARENT ) );
+            //findviewid
+
+
+            imgFotoSug = (ImageView) dialog.findViewById(R.id.imgFotoSug);
+            txtReferencia = (EditText) dialog.findViewById(R.id.txtRefSug);
+            txtComentario = (EditText) dialog.findViewById(R.id.txtComSug);
+            dialog_spinner_sug = (Spinner) dialog.findViewById(R.id.txtDistSug);
+            btnEnviarSug = (Button) dialog.findViewById(R.id.btnEnvSug);
+            btnCancel = (Button) dialog.findViewById(R.id.btnCancSug);
+
+            //on click
+
+            imgFotoSug.setOnClickListener( this );
+            btnEnviarSug.setOnClickListener( this );
+            btnCancel.setOnClickListener( this );
+
+            dialog.show();
+
+
+        break;
+
+            case R.id.btnCancSug:
+                dialog.dismiss();
+                break;
+            case R.id.btnEnvSug:
+                guardarDatosFirebaseDialogNotDatabase();
+                dialog.dismiss();
+                break;
+            case  R.id.imgFotoSug:
+                Intent intent= new Intent( );
+                intent.setAction(  MediaStore.ACTION_IMAGE_CAPTURE );
+                startActivityForResult( intent,1 );
+                break;
+
+        }
+    }
+    private void guardarDatosFirebaseDialogNotDatabase()  {
+
+
+        Map<String,Object> sugerencia =new HashMap<>(  );
+
+
+        if(bitmap!=null) {
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            bitmap.compress( Bitmap.CompressFormat.JPEG, 100, baos);
+            byte[] imageBytes = baos.toByteArray();
+            String imageString = Base64.encodeToString(imageBytes, Base64.DEFAULT);
+            //encode
+            String sugerenciaa_id = mDatabase.push().getKey();
+
+            sugerencia.put("imagenBase64",imageString);
+            sugerencia.put("Interseccion",txtReferencia.getText().toString());
+            sugerencia.put("Comentarios",txtComentario.getText().toString());
+            sugerencia.put("Latitud",location.getLatitude());
+            sugerencia.put("Longitud",location.getLongitude());
+            sugerencia.put( "Distrito", dialog_spinner_sug.getSelectedItem().toString() );
+            sugerencia.put("sugerencia_id",sugerenciaa_id );
+
+            mDatabase.child("Sugerencias").child(sugerenciaa_id ).setValue(sugerencia).addOnCompleteListener(new OnCompleteListener<Void>() {
+                @Override
+                public void onComplete(@NonNull Task<Void> task) {
+                    Toast.makeText(getContext(),"Sugerencia enviada",Toast.LENGTH_SHORT).show();
+
+                }
+            }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+
+                    Toast.makeText(getContext(),"Error al enviar.",Toast.LENGTH_SHORT).show();
+
+                }
+            });
+
+
+        }else {
+            Toast.makeText(  getContext(),"Error Bitmap vacio",Toast.LENGTH_SHORT ).show();
         }
     }
 

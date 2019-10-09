@@ -1,9 +1,8 @@
-package com.thesummitdev.rotclean_v1;
+package com.thesummitdev.rotclean_v1.Vistas;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -20,6 +19,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.thesummitdev.rotclean_v1.R;
 
 import java.util.HashMap;
 import java.util.Map;

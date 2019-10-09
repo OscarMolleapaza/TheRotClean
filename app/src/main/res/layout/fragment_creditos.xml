@@ -7,7 +7,7 @@
     android:background="#FFFFFF"
     android:orientation="vertical"
 
-    tools:context=".creditos">
+    tools:context=".Fragments.creditos">
 
     <ScrollView
         android:layout_width="match_parent"

@@ -1,60 +1,34 @@
-package com.thesummitdev.rotclean_v1;
+package com.thesummitdev.rotclean_v1.Vistas;
 
-import android.Manifest;
+import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
-import android.content.DialogInterface;
-import android.content.Intent;
-import android.content.SharedPreferences;
-import android.content.pm.PackageManager;
-import android.location.Location;
-import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Looper;
-import android.provider.Settings;
-import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
-import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
+import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
 
-import com.google.android.gms.location.FusedLocationProviderClient;
-import com.google.android.gms.location.LocationCallback;
-import com.google.android.gms.location.LocationRequest;
-import com.google.android.gms.location.LocationResult;
-import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.maps.CameraUpdateFactory;
-import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.GoogleMap.OnMyLocationButtonClickListener;
-import com.google.android.gms.maps.GoogleMap.OnMyLocationClickListener;
-import com.google.android.gms.maps.OnMapReadyCallback;
-import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.model.BitmapDescriptorFactory;
-import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.Marker;
-import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
+import com.mikepenz.materialdrawer.AccountHeader;
+import com.mikepenz.materialdrawer.AccountHeaderBuilder;
 import com.mikepenz.materialdrawer.Drawer;
 import com.mikepenz.materialdrawer.DrawerBuilder;
 import com.mikepenz.materialdrawer.model.PrimaryDrawerItem;
+import com.mikepenz.materialdrawer.model.ProfileDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
+import com.mikepenz.materialdrawer.model.interfaces.IProfile;
 import com.mikepenz.materialdrawer.model.interfaces.Nameable;
-
-import java.util.ArrayList;
+import com.thesummitdev.rotclean_v1.Fragments.Comentarios;
+import com.thesummitdev.rotclean_v1.Fragments.Distritos;
+import com.thesummitdev.rotclean_v1.Fragments.mapa;
+import com.thesummitdev.rotclean_v1.R;
+import com.thesummitdev.rotclean_v1.Fragments.admin;
+import com.thesummitdev.rotclean_v1.Fragments.creditos;
+import com.thesummitdev.rotclean_v1.Fragments.sugerencias;
 
 public class MapsActivity extends AppCompatActivity {
 
@@ -62,18 +36,39 @@ public class MapsActivity extends AppCompatActivity {
     //summit123  alias : newkeyrotclean
     public static final int MY_PERMISSIONS_REQUEST_LOCATION = 99;
 
+    Toolbar toolbar;
+    Drawer drawer1;
 
+    @SuppressLint("ResourceType")
     @TargetApi(Build.VERSION_CODES.M)
     @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate( savedInstanceState );
 
+        setContentView( R.layout.activity_maps );
+
+
+        toolbar = (Toolbar)findViewById(R.id.toolBarMain);
+
+
+        AccountHeader headerResult = new AccountHeaderBuilder()
+                .withActivity(this)
+                .withHeaderBackground(R.drawable.grad_bg)
+                .addProfiles(
+                        new ProfileDrawerItem().withName("Oscar Molleapaza").withEmail("oscarmolleapaza@tecsup.edu.pe").withIcon(getResources().getDrawable(R.drawable.profile))
+                ).withOnAccountHeaderListener(new AccountHeader.OnAccountHeaderListener() {
+                    @Override
+                    public boolean onProfileChanged(View view, IProfile profile, boolean current) {
+                        return false;
+                    }
+                }).build();
+
         if (Build.VERSION.SDK_INT > 16) {
             getWindow().setFlags( WindowManager.LayoutParams.FLAG_FULLSCREEN,
                     WindowManager.LayoutParams.FLAG_FULLSCREEN );
         }
-        setContentView( R.layout.activity_maps );
+
         PrimaryDrawerItem item1 = new PrimaryDrawerItem().withIdentifier( 1 ).withIcon( R.drawable.ic_map_ligh ).withName( "Mapa" ); //MAPA
         PrimaryDrawerItem item2 = new PrimaryDrawerItem().withIdentifier( 2 ).withIcon( R.mipmap.district).withName( "Distritos" ); //Distritos
         PrimaryDrawerItem item3 = new PrimaryDrawerItem().withIdentifier( 3 ).withIcon( R.drawable.ic_acerca ).withName( "Sugerencias" ); //Sugerencias
@@ -82,9 +77,11 @@ public class MapsActivity extends AppCompatActivity {
         PrimaryDrawerItem item6 = new PrimaryDrawerItem().withIdentifier( 6 ).withIcon( R.drawable.ic_menu_share ).withName( "Admin" ); //ADMIN
 
 
-        new DrawerBuilder()
+         drawer1 = new DrawerBuilder()
                 .withActivity( this )
-                .withHeader( R.layout.util_drawer_hdr )
+                .withToolbar(toolbar)
+                .withAccountHeader(headerResult)
+
                 .addDrawerItems(
                         item1,
                         item2,
@@ -148,58 +145,6 @@ public class MapsActivity extends AppCompatActivity {
                 .withShowDrawerOnFirstLaunch( false )
                 .withFireOnInitialOnClick( true )
                 .withShowDrawerUntilDraggedOpened( false )
-                .build();
+                .build() ;
     }
-
-
-
-    public boolean checkLocationPermission() {
-        if (ContextCompat.checkSelfPermission(this,
-                Manifest.permission.ACCESS_FINE_LOCATION)
-                != PackageManager.PERMISSION_GRANTED) {
-
-            // Should we show an explanation?
-            if (ActivityCompat.shouldShowRequestPermissionRationale(this,
-                    Manifest.permission.ACCESS_FINE_LOCATION)) {
-
-                // Show an explanation to the user *asynchronously* -- don't block
-                // this thread waiting for the user's response! After the user
-                // sees the explanation, try again to request the permission.
-                new AlertDialog.Builder(this)
-                        .setTitle("Permiso")
-                        .setMessage("Necesitamos permiso para acceder a su ubicacion.")
-                        .setPositiveButton("Aceptar", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialogInterface, int i) {
-                                //Prompt the user once explanation has been shown
-                                ActivityCompat.requestPermissions(MapsActivity.this,
-                                        new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
-                                        MY_PERMISSIONS_REQUEST_LOCATION);
-
-
-                            }
-                        })
-                        .setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialogInterface, int i) {
-                                Toast.makeText(getApplicationContext(),"Como chuchas vamos a ver tu ubicacion entonces, me vale madres igual lo tomare como un si",Toast.LENGTH_SHORT).show();
-                            }
-                        })
-                        .create()
-                        .show();
-
-
-            } else {
-                // No explanation needed, we can request the permission.
-                ActivityCompat.requestPermissions(this,
-                        new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
-                        MY_PERMISSIONS_REQUEST_LOCATION);
-
-            }
-            return false;
-        } else {
-            return true;
-        }
-    }
-
 }

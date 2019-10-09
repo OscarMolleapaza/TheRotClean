@@ -8,7 +8,19 @@
     android:animateLayoutChanges="true"
 
     android:background="@drawable/grad_bg"
-    tools:context=".Register">
+    tools:context=".Vistas.Register">
+
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
     <RelativeLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -194,7 +206,7 @@
                 android:layout_height="40dp"
                 android:layout_below="@+id/linlay1"
                 android:layout_centerHorizontal="true"
-                android:layout_marginTop="50dp"
+                android:layout_marginTop="20dp"
                 android:background="@drawable/btn_bg"
                 android:fontFamily="sans-serif-medium"
                 android:paddingLeft="70dp"
@@ -209,6 +221,8 @@
     </RelativeLayout>
 
 
+        </LinearLayout>
 
+    </ScrollView>
 
 </RelativeLayout>

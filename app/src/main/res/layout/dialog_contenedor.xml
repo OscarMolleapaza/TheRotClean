@@ -25,13 +25,16 @@
 
             <Button
                 android:id="@+id/btnReport"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
+                android:layout_width="100dp"
+                android:layout_height="70dp"
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentTop="true"
                 android:layout_marginLeft="5dp"
                 android:layout_marginTop="5dp"
-                android:background="@android:drawable/ic_menu_report_image" />
+                android:text="Reportar"
+                android:textColor="@color/colorGreenDark"
+                android:background="@drawable/btn_bg"
+                />
 
             <Button
                 android:id="@+id/btnClose"

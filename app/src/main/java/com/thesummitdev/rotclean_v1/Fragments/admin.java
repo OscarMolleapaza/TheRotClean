@@ -1,4 +1,4 @@
-package com.thesummitdev.rotclean_v1;
+package com.thesummitdev.rotclean_v1.Fragments;
 
 
 import android.content.Intent;
@@ -20,6 +20,8 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.thesummitdev.rotclean_v1.R;
+import com.thesummitdev.rotclean_v1.Vistas.Register;
 
 import static androidx.constraintlayout.widget.Constraints.TAG;
 
@@ -78,7 +80,7 @@ public class admin extends Fragment {
 
     private void updateUI(FirebaseUser user){
         if(user != null){
-            Intent intent = new Intent(getActivity(),Register.class);
+            Intent intent = new Intent(getActivity(), Register.class);
             startActivity(intent);
         }
 

@@ -1,4 +1,4 @@
-package com.thesummitdev.rotclean_v1;
+package com.thesummitdev.rotclean_v1.Modelos;
 
 public class Tachos {
 
