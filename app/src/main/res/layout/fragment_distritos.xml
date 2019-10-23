@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@color/primary_dark"
     tools:context=".Fragments.Distritos">
 
@@ -38,19 +39,26 @@
                     android:textColor="#ffff"
                     android:fontFamily="@font/caviardreamsbold"
                     android:textSize="20dp"
-                    android:text="Municipalidad Distrital de JOSE LUIS BUSTAMANTE Y RIVERO"/>
-                <ImageView
-                    android:layout_marginTop="160dp"
-                    android:layout_width="match_parent"
-                    android:layout_height="200dp"
-                    android:foregroundGravity="center"
-                    android:src="@drawable/bustamante"/>
+                    android:text="Municipalidad Distrital de YANAHUARA"/>
+
+
+                <com.mikhaellopez.circularimageview.CircularImageView
+                    android:layout_marginTop="150dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="400dp"
+                    android:src="@drawable/yanahuara"
+                    app:civ_border_color="#3f51b5"
+                    app:civ_border_width="5dp"
+                    app:civ_shadow="true"
+                    app:civ_shadow_radius="10"
+                    app:civ_shadow_color="#3f51b5"/>
+
                 <TextView
                     android:textSize="15dp"
                     android:layout_marginLeft="20dp"
                     android:layout_marginRight="20dp"
                     android:text="El primer distrito en ser mapeado, cuenta con 157 contenedores en total, contamos con el apoyo del Alcalde, Dr. Paul Rondon."
-                    android:layout_marginTop="380dp"
+                    android:layout_marginTop="580dp"
                     android:textColor="#ffff"
                     android:fontFamily="@font/caviardreamsbold"
                     android:layout_width="match_parent"
@@ -59,40 +67,6 @@
 
             </RelativeLayout>
 
-            <RelativeLayout
-                android:layout_marginTop="350dp"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-                <TextView
-                    android:gravity="center"
-                    android:layout_marginTop="100dp"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:textColor="#ffff"
-                    android:fontFamily="@font/caviardreamsbold"
-                    android:textSize="20dp"
-                    android:text="Municipalidad Provincial de PUNO"/>
-                <ImageView
-                    android:layout_marginTop="160dp"
-                    android:layout_width="match_parent"
-                    android:layout_height="200dp"
-                    android:foregroundGravity="center"
-                    android:src="@drawable/puno"/>
-                <TextView
-                    android:textSize="15dp"
-                    android:layout_marginLeft="20dp"
-                    android:layout_marginRight="20dp"
-                    android:text="Este distrito se encuentra en desarrollo, estamos mapeando la ciudad, en pocos dias podras disfrutar la aplicacion en este distrito."
-                    android:layout_marginTop="380dp"
-                    android:textColor="#ffff"
-                    android:fontFamily="@font/caviardreamsbold"
-                    android:layout_width="match_parent"
-                    android:layout_marginBottom="30dp"
-                    android:layout_height="wrap_content" />
-
-
-            </RelativeLayout>
 
 
 

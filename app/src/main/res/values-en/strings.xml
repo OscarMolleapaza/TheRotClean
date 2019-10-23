@@ -21,7 +21,7 @@
     <string name="copyrigth">© Copyright 2019 Copyright.es -  All rights reserved.</string>
     <string name="title_activity_maps">Map</string>
     <string name="fecha_lanzamiento">January 31, 2019</string>
-    <string name="desc_rot">RotClean is an application that helps people to find the location of garbage collectors to improve the management of solid waste, cleaning services and recycling points, with the collaboration of Rotary Club Internacional and developed by The Summit Developers.</string>
+    <string name="desc_rot">CiliApp is an application that helps people find the location of garbage collectors to improve solid waste management, cleaning services and recycling points, with the collaboration of District Municipalities and developed by The Summit Developers.</string>
     <string name="about">About</string>
     <string name="about_desc">" We are a software development company that aims to improve processes in any industry, through ideas and projects innovators using web and mobile technologies hosted in the cloud."</string>
 </resources>

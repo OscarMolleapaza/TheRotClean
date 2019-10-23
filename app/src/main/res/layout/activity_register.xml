@@ -34,7 +34,6 @@
             android:id="@+id/rellay1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/imgView_logo"
             >
 
             <TextView
@@ -70,7 +69,7 @@
                         android:textSize="15sp" />
 
                     <EditText
-                        android:text="Cesar"
+                        android:text=""
                         android:id="@+id/txtName"
                         android:layout_width="match_parent"
                         android:layout_height="40dp"
@@ -99,7 +98,7 @@
                         android:textSize="15sp" />
 
                     <EditText
-                        android:text="Mamani Canaza"
+                        android:text=""
                         android:id="@+id/txtLast"
                         android:layout_width="match_parent"
                         android:layout_height="40dp"
@@ -153,7 +152,7 @@
                         android:textSize="15sp" />
 
                     <EditText
-                        android:text="cesar@test.com"
+                        android:text=""
                         android:id="@+id/txtUser"
                         android:layout_width="match_parent"
                         android:layout_height="40dp"
@@ -184,7 +183,7 @@
 
                     <EditText
                         android:id="@+id/txtPass"
-                        android:text="willyputa"
+                        android:text=""
                         android:layout_width="match_parent"
                         android:layout_height="40dp"
                         android:layout_marginTop="5dp"
