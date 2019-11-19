@@ -25,13 +25,7 @@ public class wizard_init extends AppIntro {
             getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                     WindowManager.LayoutParams.FLAG_FULLSCREEN);
         }
-         settings = getSharedPreferences( "prefs", 0 );
-         firstRun = settings.getBoolean( "firstRun", false );
-        if (firstRun == true) {
-            Intent i = new Intent( getApplicationContext(), MapsActivity.class );
-            startActivity( i );
 
-        }
         SliderPage sliderPage1 = new SliderPage();
         sliderPage1.setTitle("Hola Somos The Summit Developers!");
         sliderPage1.setDescription("Acompañanos en este pequeño Tutorial.");
@@ -69,14 +63,17 @@ public class wizard_init extends AppIntro {
     @Override
     public void onSkipPressed(Fragment currentFragment) {
         super.onSkipPressed(currentFragment);
-
+        settings = getSharedPreferences( "prefs", 0 );
         SharedPreferences.Editor editor = settings.edit();
+
         editor.putBoolean( "firstRun", true );
         editor.commit();
-                Intent intent = new Intent(wizard_init.this,MapsActivity.class);
-                startActivity(intent);
+        Intent intent = new Intent(wizard_init.this,MapsActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+        intent.addFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS);
+        startActivity(intent);
 
-             //  finish();
+        finish();
 
                //prueba commit
     }
@@ -84,12 +81,15 @@ public class wizard_init extends AppIntro {
     @Override
     public void onDonePressed(Fragment currentFragment) {
         super.onDonePressed(currentFragment);
+        settings = getSharedPreferences( "prefs", 0 );
         SharedPreferences.Editor editor = settings.edit();
         editor.putBoolean( "firstRun", true );
         editor.commit();
         Intent intent = new Intent(wizard_init.this,MapsActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+        intent.addFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS);
         startActivity(intent);
-        //finish();
+        finish();
 
 
     }

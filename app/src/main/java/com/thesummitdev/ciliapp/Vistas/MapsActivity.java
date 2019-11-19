@@ -2,6 +2,8 @@ package com.thesummitdev.ciliapp.Vistas;
 
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
@@ -35,8 +37,11 @@ public class MapsActivity extends AppCompatActivity {
     //summit123  alias : newkeyrotclean
     public static final int MY_PERMISSIONS_REQUEST_LOCATION = 99;
 
+    SharedPreferences settings;
+    boolean firstRun;
     Toolbar toolbar;
     Drawer drawer1;
+
 
     @SuppressLint("ResourceType")
     @TargetApi(Build.VERSION_CODES.M)
