@@ -77,53 +77,6 @@
                 android:textColor="@android:color/background_dark"
                 android:textSize="14sp" />
 
-            <TextView
-                android:id="@+id/lblCorreo2"
-                android:layout_width="match_parent"
-                android:fontFamily="@font/caviardreamsbold"
-                android:layout_height="37dp"
-                android:gravity="center_vertical"
-                android:paddingLeft="10dp"
-                android:paddingTop="10dp"
-                android:text="molleapazafloreso@gmail.com"
-                android:textColor="@android:color/background_dark"
-                android:textSize="14sp" />
-
-            <TextView
-                android:id="@+id/lblContact"
-                android:layout_width="match_parent"
-                android:layout_height="30dp"
-                android:background="@color/colorGreen"
-                android:gravity="center_vertical"
-                android:paddingLeft="10dp"
-                android:fontFamily="@font/caviardreamsbold"
-                android:text="Celular:"
-                android:textColor="@android:color/background_light"
-                android:textSize="18sp" />
-
-            <TextView
-                android:id="@+id/lblNum1"
-                android:layout_width="match_parent"
-                android:layout_height="42dp"
-                android:gravity="center_vertical"
-                android:padding="10dp"
-                android:fontFamily="@font/caviardreamsbold"
-                android:paddingLeft="10dp"
-                android:text="+51 972404302"
-                android:textColor="@android:color/background_dark"
-                android:textSize="14sp" />
-            <TextView
-                android:id="@+id/lblNum2"
-                android:layout_width="match_parent"
-                android:layout_height="42dp"
-                android:gravity="center_vertical"
-
-                android:fontFamily="@font/caviardreamsbold"
-                android:padding="10dp"
-                android:paddingLeft="10dp"
-                android:text="+51 999215757"
-                android:textColor="@android:color/background_dark"
-                android:textSize="14sp" />
 
             <TextView
                 android:id="@+id/lblVers"
@@ -145,7 +98,7 @@
                 android:paddingLeft="10dp"
                 android:paddingTop="10dp"
                 android:paddingBottom="10dp"
-                android:text="1.1.0"
+                android:text="1.3.0"
                 android:fontFamily="@font/caviardreamsbold"
                 android:textColor="@android:color/background_dark"
                 android:textSize="14sp" />
@@ -171,7 +124,7 @@
                 android:paddingTop="10dp"
                 android:fontFamily="@font/caviardreamsbold"
                 android:paddingBottom="10dp"
-                android:text="15 de Octubre, 2019"
+                android:text="24 de Octubre, 2019"
                 android:textColor="@android:color/background_dark"
                 android:textSize="14sp" />
 
@@ -200,7 +153,36 @@
                 android:textColor="@android:color/background_dark"
                 android:textSize="14sp" />
 
+
             <TextView
+                android:id="@+id/lblPol"
+                android:layout_width="match_parent"
+                android:layout_height="30dp"
+                android:background="@color/colorGreen"
+                android:gravity="center_vertical"
+                android:paddingLeft="10dp"
+                android:fontFamily="@font/caviardreamsbold"
+                android:text="Politicas:"
+                android:textColor="@android:color/background_light"
+                android:textSize="18sp" />
+
+            <TextView
+
+                android:id="@+id/lblPoliticas"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:gravity="center_vertical"
+                android:paddingLeft="10dp"
+                android:paddingTop="10dp"
+                android:fontFamily="@font/caviardreamsbold"
+                android:textColorLink="@color/gradientStart"
+                android:paddingBottom="10dp"
+                android:text="@string/politicas"
+                android:textColor="@android:color/background_dark"
+                android:textSize="14sp" />
+
+            <TextView
+
                 android:id="@+id/lblDesa"
                 android:layout_width="match_parent"
                 android:layout_height="30dp"

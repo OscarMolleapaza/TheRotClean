@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
@@ -56,11 +57,12 @@ public class MapsActivity extends AppCompatActivity {
         toolbar = (Toolbar)findViewById(R.id.toolBarMain);
 
 
+
         AccountHeader headerResult = new AccountHeaderBuilder()
                 .withActivity(this)
                 .withHeaderBackground(R.drawable.grad_bg)
                 .addProfiles(
-                        new ProfileDrawerItem().withName("Oscar Molleapaza").withEmail("oscarmolleapaza@tecsup.edu.pe").withIcon(getResources().getDrawable(R.drawable.profile))
+                        new ProfileDrawerItem().withName("Usuario Invitado").withEmail("guess@cili.app.pe").withTextColor(R.color.white).withIcon(getResources().getDrawable(R.drawable.user))
                 ).withOnAccountHeaderListener(new AccountHeader.OnAccountHeaderListener() {
                     @Override
                     public boolean onProfileChanged(View view, IProfile profile, boolean current) {
@@ -76,7 +78,7 @@ public class MapsActivity extends AppCompatActivity {
         PrimaryDrawerItem item1 = new PrimaryDrawerItem().withIdentifier( 1 ).withIcon( R.drawable.ic_map_ligh ).withName( "Mapa" ); //MAPA
         PrimaryDrawerItem item2 = new PrimaryDrawerItem().withIdentifier( 2 ).withIcon( R.mipmap.district).withName( "Distritos" ); //Distritos
         //PrimaryDrawerItem item3 = new PrimaryDrawerItem().withIdentifier( 3 ).withIcon( R.drawable.ic_acerca ).withName( "Sugerencias" ); //Sugerencias
-        PrimaryDrawerItem item4 = new PrimaryDrawerItem().withIdentifier( 4 ).withIcon( R.drawable.ic_informacion ).withName( "Creditos" );     //Creditos
+        PrimaryDrawerItem item4 = new PrimaryDrawerItem().withIdentifier( 4 ).withIcon( R.drawable.ic_informacion ).withName( "Acerca De..." );     //Creditos
         PrimaryDrawerItem item5 = new PrimaryDrawerItem().withIdentifier( 5 ).withIcon( R.mipmap.comments).withName( "Comentarios" ); //Comentarios
         PrimaryDrawerItem item6 = new PrimaryDrawerItem().withIdentifier( 6 ).withIcon( R.mipmap.login ).withName( "Admin" ); //ADMIN
 

@@ -38,8 +38,8 @@ public class wizard_init extends AppIntro {
         SliderPage sliderPage2 = new SliderPage();
         sliderPage2.setTitle("Se parte del cambio");
         sliderPage2.setDescription("Encuentra la ubicacion de un contenedor cerca a tu area.");
-        sliderPage2.setImageDrawable(R.drawable.ubicacion);
-        sliderPage2.setBgColor(Color.parseColor("#008080"));
+        sliderPage2.setImageDrawable(R.drawable.slider2);
+        sliderPage2.setBgColor(Color.parseColor("#074343"));
 
 
         addSlide(AppIntroFragment.newInstance(sliderPage2));
@@ -47,7 +47,7 @@ public class wizard_init extends AppIntro {
         SliderPage sliderPage3 = new SliderPage();
         sliderPage3.setTitle("Sugiere un Contenedor");
         sliderPage3.setDescription("Puedes sugerir un contenedor cerca a tu area.");
-        sliderPage3.setImageDrawable(R.drawable.menu);
+        sliderPage3.setImageDrawable(R.drawable.slider3);
         sliderPage3.setBgColor(Color.parseColor("#154E94"));
         addSlide(AppIntroFragment.newInstance(sliderPage3));
 
@@ -55,7 +55,7 @@ public class wizard_init extends AppIntro {
         sliderPage4.setTitle("Reporta un Contenedor");
         sliderPage4.setDescription("Puedes reportar un Contenedor dependiendo de su estado.");
         sliderPage4.setImageDrawable(R.drawable.screen_reporte);
-        sliderPage4.setBgColor(Color.parseColor("#008080"));
+        sliderPage4.setBgColor(Color.parseColor("#074343"));
         addSlide(AppIntroFragment.newInstance(sliderPage4));
 
     }

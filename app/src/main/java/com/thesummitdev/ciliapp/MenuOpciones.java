@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
@@ -76,21 +77,14 @@ public class MenuOpciones {
     }
 
     public void reportar(final Context context, final String accion){
-        AlertDialog.Builder builder= new AlertDialog.Builder(context);
+        final AlertDialog.Builder builder= new AlertDialog.Builder(context);
         builder.setTitle("¿Está seguro de reportar este tacho?");
         builder.setMessage("Motivo: "+accion+".\n\n(Si realiza el reporte, su municipalidad correspondiente se encargará de verificarlo.)");
         builder.setPositiveButton("Si",new DialogInterface.OnClickListener() {
             @Override
             public void onClick(final DialogInterface dialog, int which) {
                 Log.d(TAG, "onClick: El reporte se envió a la papelera de reciclaje satisfactoriamente.");
-                /*if(accion.equals("opcion1")) {  //Este bloque se encarga de registrar el reporte.
 
-
-
-
-                } else {
-
-                }*/
                 Map<String,Object> reporte =new HashMap<>(  );
 
                 reporte.put("tipo_reporte",accion.trim());
@@ -102,7 +96,10 @@ public class MenuOpciones {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
 
+                        Toast.makeText(context,"Reporte enviado! Gracias por contribuir.",Toast.LENGTH_LONG).show();
+
                         Log.d("Estado", "Reporte enviado");
+
 
                     }
                 }).addOnFailureListener(new OnFailureListener() {

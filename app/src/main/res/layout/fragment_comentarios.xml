@@ -25,6 +25,7 @@
 
 
         <RatingBar
+
             android:id="@+id/ratingBar"
             android:stepSize="1"
             android:rating="5"

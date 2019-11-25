@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">CiliApp</string>
     <string name="title_activity_maps">Rotclean</string>
+    <string name="politicas"><a href="http://www.rotaractclubpuno.com/wp-content/uploads/2019/10/POLITICAS-DE-PRIVACIDAD-DE-LA-APLICACI%C3%93N-CILIAPP.pdf">Politicas de Privacidad</a></string>
 
     <string name="afirmative">Yes</string>
     <string name="negative">No</string>

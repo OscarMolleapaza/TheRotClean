@@ -138,7 +138,7 @@ public class sugerencias extends Fragment {
             mDatabaseReference.child("Sugerencias").push().setValue(sugerencia).addOnCompleteListener(new OnCompleteListener<Void>() {
                 @Override
                 public void onComplete(@NonNull Task<Void> task) {
-                    Toast.makeText(getContext(),"Sugerencia enviada",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(),"Sugerencia enviada",Toast.LENGTH_LONG).show();
 
                 }
             }).addOnFailureListener(new OnFailureListener() {
