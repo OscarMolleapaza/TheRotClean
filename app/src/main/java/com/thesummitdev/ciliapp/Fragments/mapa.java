@@ -229,8 +229,6 @@ public class mapa extends Fragment implements OnMapReadyCallback, GoogleMap.OnMy
 
                             new DialogoContenedor(getContext(), "" + marker.getId(), "" + infoTacho.getTipoTacho(), "" + infoTacho.getLugarDistrito(), "" + infoTacho.getComentario(), "" + infoTacho.getImagenbase64(), infoTacho.getLatitud(), infoTacho.getLongitud());
 
-                            Toast.makeText(getContext(), "" + marker.getId(), Toast.LENGTH_SHORT).show();
-
 
                             return true; //Creamos el diálogo pasando los datos.
                         }
@@ -327,7 +325,7 @@ public class mapa extends Fragment implements OnMapReadyCallback, GoogleMap.OnMy
                         .setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
-                                Toast.makeText(getContext(),"Como chuchas vamos a ver tu ubicacion entonces, me vale madres igual, lo tomare como un si",Toast.LENGTH_LONG).show();
+                                Toast.makeText(getContext(),"Como vamos a ver tu ubicacion entonces? Lo tomare como un si.",Toast.LENGTH_LONG).show();
                             }
                         })
                         .create()

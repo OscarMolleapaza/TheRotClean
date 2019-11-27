@@ -24,4 +24,5 @@
     <string name="desc_rot">CiliApp es una aplicación que ayuda a las personas a encontrar la ubicación de los recolectores de basura para mejorar la gestión de residuos sólidos, servicios de limpieza y puntos de reciclaje, con la colaboración de los Municipios Distritales y desarrollado por The Summit Developers.</string>
     <string name="about">Acerca de.</string>
     <string name="about_desc">Somos una empresa de desarrollo de software que tiene como objetivo mejorar los procesos en cualquier industria, mediante ideas y proyectos innovadores usando tecnologias web y moviles alojadas en la nube.</string>
+    <string name="politicas"><a href="http://www.rotaractclubpuno.com/wp-content/uploads/2019/10/POLITICAS-DE-PRIVACIDAD-DE-LA-APLICACI%C3%93N-CILIAPP.pdf">Politicas de Privacidad</a></string>
 </resources>

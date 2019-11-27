@@ -23,16 +23,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-            <Button
-                android:id="@+id/btnReport"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentTop="true"
-                android:layout_marginLeft="5dp"
-                android:layout_marginTop="5dp"
-                android:background="@drawable/info"
-                />
+
 
             <Button
                 android:id="@+id/btnClose"
@@ -107,6 +98,20 @@
                     android:textColor="#FFFFFF"
                     android:textSize="25sp"
                     android:textStyle="bold" />
+
+                <Button
+                    android:layout_marginTop="15dp"
+                    android:id="@+id/btnReport"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/boton_reportar_redoneado"
+                    android:paddingLeft="10dp"
+                    android:paddingRight="10dp"
+                    android:text="Reportar"
+                    android:textColor="#FFFFFF"
+                    android:textSize="25sp"
+                    android:textStyle="bold" />
+
             </LinearLayout>
 
         </RelativeLayout>

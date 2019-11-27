@@ -24,4 +24,5 @@
     <string name="desc_rot">CiliApp is an application that helps people find the location of garbage collectors to improve solid waste management, cleaning services and recycling points, with the collaboration of District Municipalities and developed by The Summit Developers.</string>
     <string name="about">About</string>
     <string name="about_desc">" We are a software development company that aims to improve processes in any industry, through ideas and projects innovators using web and mobile technologies hosted in the cloud."</string>
+    <string name="politicas"><a href="http://www.rotaractclubpuno.com/wp-content/uploads/2019/10/POLITICAS-DE-PRIVACIDAD-DE-LA-APLICACI%C3%93N-CILIAPP.pdf">Politicas de Privacidad</a></string>
 </resources>
