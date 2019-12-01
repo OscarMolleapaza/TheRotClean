@@ -21,7 +21,7 @@
         android:layout_margin="16dp"
         android:clickable="true"
         app:backgroundTint="@color/white"
-        android:src="@drawable/reporte"
+        android:src="@drawable/sugerir_tacho"
         android:id="@+id/buttomSugerir"
         android:focusable="true" />
 

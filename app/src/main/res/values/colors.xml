@@ -20,7 +20,9 @@
 
     <color name="colorGreen">#1A758B</color>
 
-    <color name="colorinicial">#1A758B</color>
-    <color name="colorfinal">#165160</color>
+    <color name="colorinicial">#2E3E96</color>
+    <color name="colorfinal">#18245C</color>
+
+
 
 </resources>

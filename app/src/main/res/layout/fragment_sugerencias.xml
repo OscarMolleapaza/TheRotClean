@@ -26,7 +26,7 @@
                 android:id="@+id/imgFotoSug"
                 android:layout_width="match_parent"
                 android:layout_height="200dp"
-                android:background="@drawable/grad_bg"
+                android:background="@drawable/grad_prueba"
                 android:src="@drawable/add_foto" />
 
             <EditText

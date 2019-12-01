@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.ActivityInfo;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
@@ -49,9 +50,11 @@ public class MapsActivity extends AppCompatActivity {
     @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         super.onCreate( savedInstanceState );
 
         setContentView( R.layout.activity_maps );
+
 
 
         toolbar = (Toolbar)findViewById(R.id.toolBarMain);
@@ -60,7 +63,7 @@ public class MapsActivity extends AppCompatActivity {
 
         AccountHeader headerResult = new AccountHeaderBuilder()
                 .withActivity(this)
-                .withHeaderBackground(R.drawable.grad_bg)
+                .withHeaderBackground(R.color.white)
                 .addProfiles(
                         new ProfileDrawerItem().withName("Usuario Invitado").withEmail("guess@cili.app.pe").withTextColor(R.color.white).withIcon(getResources().getDrawable(R.drawable.user))
                 ).withOnAccountHeaderListener(new AccountHeader.OnAccountHeaderListener() {

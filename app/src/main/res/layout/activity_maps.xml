@@ -18,7 +18,7 @@
                 <androidx.appcompat.widget.Toolbar
                     style="@style/AppTheme.NoActionBar"
                     android:id="@+id/toolBarMain"
-                    android:background="@drawable/grad_bg"
+                    android:background="@drawable/grad_prueba"
                     android:layout_width="match_parent"
                     android:layout_height="?android:attr/actionBarSize">
 

@@ -10,6 +10,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentSender;
 import android.content.pm.PackageManager;
+import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
@@ -20,6 +21,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Base64;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -53,6 +55,7 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -147,6 +150,8 @@ public class mapa extends Fragment implements OnMapReadyCallback, GoogleMap.OnMy
         gpsEnable();
         mDatabase = FirebaseDatabase.getInstance().getReference(); //Instanciar BD Firebase
         mapFragment.getMapAsync(this);
+
+
         return view;
 
     }
@@ -185,6 +190,18 @@ public class mapa extends Fragment implements OnMapReadyCallback, GoogleMap.OnMy
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
+
+        try{
+            boolean isSuccess = googleMap.setMapStyle(MapStyleOptions.loadRawResourceStyle(getContext(),R.raw.map_style_2));
+            if(!isSuccess){
+                Log.d("Error","Load Mapa Failed");
+            }
+        }
+        catch (Resources.NotFoundException ex){
+            ex.printStackTrace();
+        }
+
+
         mMap = googleMap;
         mMap.isMyLocationEnabled();
         if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {

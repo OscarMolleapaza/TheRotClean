@@ -15,7 +15,7 @@
         android:layout_alignParentTop="true"
         android:layout_alignParentRight="true"
         android:layout_alignParentLeft="true"
-        app:cardBackgroundColor="@color/colorGreenLight"
+        app:cardBackgroundColor="#E7E7E7"
         app:cardCornerRadius="20dp"
         app:contentPaddingBottom="10dp">
 
@@ -58,6 +58,7 @@
                     app:srcCompat="@drawable/ic_delete_black_24dp"/>
 
                 <TextView
+                    android:fontFamily="@font/caviardreamsbold"
                     android:id="@+id/lblTipo"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -68,6 +69,7 @@
                     android:textStyle="bold" />
 
                 <TextView
+                    android:fontFamily="@font/caviardreamsbold"
                     android:id="@+id/lblDistrito"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -78,6 +80,7 @@
                     android:textSize="16sp" />
 
                 <TextView
+                    android:fontFamily="@font/caviardreamsbold"
                     android:id="@+id/lblComentario"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -88,27 +91,29 @@
                     android:textSize="16sp" />
 
                 <Button
+                    android:fontFamily="@font/caviardreamsbold"
                     android:id="@+id/btnOk"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/boton_redondeado"
+                    android:background="@drawable/btn_bg_white"
                     android:paddingLeft="10dp"
                     android:paddingRight="10dp"
                     android:text="ENTENDIDO"
-                    android:textColor="#FFFFFF"
+                    android:textColor="#009688"
                     android:textSize="25sp"
                     android:textStyle="bold" />
 
                 <Button
+                    android:fontFamily="@font/caviardreamsbold"
                     android:layout_marginTop="15dp"
                     android:id="@+id/btnReport"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/boton_reportar_redoneado"
+                    android:background="@drawable/btn_bg_white"
                     android:paddingLeft="10dp"
                     android:paddingRight="10dp"
                     android:text="Reportar"
-                    android:textColor="#FFFFFF"
+                    android:textColor="#FF0000"
                     android:textSize="25sp"
                     android:textStyle="bold" />
 
