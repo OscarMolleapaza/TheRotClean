@@ -325,7 +325,7 @@ public class mapa extends Fragment implements OnMapReadyCallback, GoogleMap.OnMy
         mMap.isMyLocationEnabled();
         mMap.setOnMyLocationButtonClickListener(this);
         mMap.setOnMyLocationClickListener(this);
-        Geocoder geo = new Geocoder(getContext(), Locale.getDefault());
+
         try{
             boolean isSuccess = googleMap.setMapStyle(MapStyleOptions.loadRawResourceStyle(getContext(),R.raw.map_style_2));
             if(!isSuccess){
@@ -357,14 +357,22 @@ public class mapa extends Fragment implements OnMapReadyCallback, GoogleMap.OnMy
                     @Override
                     public void onSuccess(Location location) {
                         if (location != null) {
+                            Log.e("Puno",location.getLatitude()+"  "+location.getLongitude());
                             try {
-
-                                address = geo.getFromLocation(location.getLatitude(),location.getLongitude(),1);
+                                Geocoder geo = new Geocoder(getActivity().getApplicationContext(), Locale.getDefault());
+                                Log.e("Puno",geo.toString());
+                                if (geo ==null){
+                                    Log.e("Puno","entro");
+                                    geo = new Geocoder(getContext(), Locale.getDefault());
+                                }
+                                address = geo.getFromLocation(location.getLatitude(),location.getLongitude(),2);
+                                Log.e("Puno",address.get(0).toString());
                                 String pais=address.get(0).getCountryName();
                                 String departamento= address.get(0).getAdminArea();
                                 String distrito=address.get(0).getLocality();
                                 Log.e("rotclean",address.get(0)+"");
                                 mMap.setMyLocationEnabled(true);
+                                Log.e("Puno",pais.replace(" ","")+"  "+departamento.replace(" ","")+"  "+distrito.replace(" ","")+"  ");
                                 mDatabase.child("Tachos").child(pais.replace(" ","")).child(departamento.replace(" ","")).child(distrito.replace(" ","")).addValueEventListener(new ValueEventListener() {
                                     @Override
                                     public void onDataChange(@NonNull final DataSnapshot dataSnapshot) {
@@ -417,7 +425,8 @@ public class mapa extends Fragment implements OnMapReadyCallback, GoogleMap.OnMy
                                 });
 
                             } catch (IOException e) {
-                                e.printStackTrace();
+                                Log.e("Puno",e.getMessage());
+
                             }
                         }
                     }
@@ -570,12 +579,12 @@ public class mapa extends Fragment implements OnMapReadyCallback, GoogleMap.OnMy
                                         if (locationResult==null)
                                             return;
                                         location = locationResult.getLastLocation();
-                                        try {
+                                      /*  try {
                                             Geocoder geo = new Geocoder(getContext(), Locale.getDefault());
                                             address = geo.getFromLocation(location.getLatitude(),location.getLongitude(),1);
                                         } catch (IOException e) {
                                             e.printStackTrace();
-                                        }
+                                        }*/
                                         mMap.moveCamera( CameraUpdateFactory.newLatLngZoom( new LatLng( location.getLatitude(),location.getLongitude() ),18) );
 
                                         fusedLocationProviderClient.removeLocationUpdates( locationCallback );
