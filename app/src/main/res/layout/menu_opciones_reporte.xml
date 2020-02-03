@@ -12,17 +12,17 @@
         android:layout_alignParentTop="true"
         android:gravity="center"
         android:orientation="vertical"
-        android:padding="4dp">
+        android:padding="2dp">
 
         <TextView
             android:id="@+id/textView"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginBottom="1dp"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="2dp"
             android:background="@color/colorRedDark"
             android:gravity="center"
-            android:paddingTop="2dp"
-            android:paddingBottom="2dp"
+            android:paddingTop="3dp"
+            android:paddingBottom="3dp"
             android:text="¿Algún problema?"
             android:textColor="@color/white"
             android:textSize="24sp" />

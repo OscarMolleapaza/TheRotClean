@@ -14,6 +14,8 @@ import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.location.Address;
+import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -58,6 +60,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -68,13 +71,28 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.gson.Gson;
 import com.thesummitdev.ciliapp.DialogoContenedor;
 import com.thesummitdev.ciliapp.R;
 import com.thesummitdev.ciliapp.Modelos.Tachos;
+import com.thesummitdev.ciliapp.Vistas.DirectionsJSONParser;
+import com.thesummitdev.ciliapp.retrofit.RetrofitClient;
+
+import org.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Locale;
 import java.util.Map;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.scalars.ScalarsConverterFactory;
 
 import static android.app.Activity.RESULT_OK;
 
@@ -108,8 +126,10 @@ public class mapa extends Fragment implements OnMapReadyCallback, GoogleMap.OnMy
     Double latitude;
     Double longitud;
     Dialog dialog;
+    String[] direccion2;
+    List<Address> address = null;
     public boolean isGPSEnabled = false;
-
+    private FusedLocationProviderClient fusedLocationClient;
     public mapa() {
         // Required empty public constructor
     }
@@ -145,16 +165,18 @@ public class mapa extends Fragment implements OnMapReadyCallback, GoogleMap.OnMy
             ft.replace(R.id.map, mapFragment).commit();
 
         }
+
         sugerir.setOnClickListener(this);
 
         gpsEnable();
         mDatabase = FirebaseDatabase.getInstance().getReference(); //Instanciar BD Firebase
         mapFragment.getMapAsync(this);
-
+        fusedLocationClient = LocationServices.getFusedLocationProviderClient(getContext());
 
         return view;
 
     }
+
 
     private void gpsEnable() {
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient( getContext() );
@@ -186,11 +208,124 @@ public class mapa extends Fragment implements OnMapReadyCallback, GoogleMap.OnMy
         } );
     }
 
+  private String getDirectionsUrl(LatLng origin, LatLng dest) {
+
+        // Punto de origen
+        String str_origin = "origin=" + origin.latitude+ "," + origin.longitude;
+
+        // punto de destino
+        String str_dest = "destination=" + dest.latitude + "," + dest.longitude;
+
+        // Sensor de modo drive
+        String sensor = "sensor=false";
+        String mode = "mode=driving";
+        // Sensor
+        String parameters = str_origin + "&" + str_dest + "&" + sensor + "&" + mode;
+
+        // Formato de salida
+        String output = "json";
+
+        // url
+        String url = "" + output + "?" + parameters+"&key=AIzaSyAFyGHMbL8D3xyn_J5sIf1ApGbMe5T79us";
+       // https://maps.googleapis.com/maps/api/directions/json?origin=-15.837974456285096,-70.02117622643709&destination=-15.837974456285096,-70.02117622643709&sensor=false&mode=driving&key=AIzaSyD7kwgqDzGW8voiXP7gAbxaKnGY_Fr4Cng
+        return url;
+    }
+
+    public void getRetrofitMap(LatLng origin, LatLng dest){
+
+       /* Retrofit retrofit= new Retrofit.Builder().baseUrl("https://maps.googleapis.com/")
+                .addConverterFactory(ScalarsConverterFactory.create()).build();
+        Api api= retrofit.create(Api.class);*/
+        MarkerOptions markerOptions = new MarkerOptions();
+        markerOptions.position(origin);
+        markerOptions.icon(BitmapDescriptorFactory.fromResource(R.mipmap.tacho_general));
+
+        //tmpRealTimeMarkers.clear();
+        //tmpRealTimeMarkers.add(mMap.addMarker(markerOptions));
+
+        Marker m = mMap.addMarker(markerOptions);
+       Call<String> llamada= RetrofitClient.getInstance().getApi().callMaps(getDirectionsUrl(origin,dest));
+       llamada.enqueue(new Callback<String>() {
+           @Override
+           public void onResponse(Call<String> call, Response<String> response) {
+               Gson g = new Gson();
+               //Data= g.fromJson(response.body(),Example.class);
+               Log.e("Gson: ",response.body());
+               if (response.isSuccessful()){
+                   JSONObject jObject;
+                   List<List<HashMap<String, String>>> routes = null;
+
+                   try {
+                       jObject = new JSONObject(response.body().toString());
+                       DirectionsJSONParser parser = new DirectionsJSONParser();
+
+                       routes = parser.parse(jObject);
+                       dibujarLineas(routes);
+                   } catch (Exception e) {
+                       e.printStackTrace();
+                   }
+
+               }else{
+                   Toast.makeText(getContext(),"Error al traer data: "+ response.code(),Toast.LENGTH_LONG).show();
+                   return;
+               }
+
+
+       }
+
+           @Override
+           public void onFailure(Call<String> call, Throwable t) {
+
+           }
+       });
+
+    }
+    public void dibujarLineas(List<List<HashMap<String, String>>> result){
+        ArrayList points = null;
+        PolylineOptions lineOptions = null;
+        MarkerOptions markerOptions = new MarkerOptions();
+
+        for (int i = 0; i < result.size(); i++) {
+            points = new ArrayList();
+            lineOptions = new PolylineOptions();
+
+            List<HashMap<String, String>> path = result.get(i);
+
+            for (int j = 0; j < path.size(); j++) {
+                HashMap<String, String> point = path.get(j);
+
+                double lat = Double.parseDouble(point.get("lat"));
+                double lng = Double.parseDouble(point.get("lng"));
+                LatLng position = new LatLng(lat, lng);
+
+                points.add(position);
+            }
+
+            lineOptions.addAll(points);
+            lineOptions.width(12);
+            lineOptions.color(Color.BLACK);
+            lineOptions.geodesic(true);
+
+        }
+
+        mMap.addPolyline(lineOptions);
+    }
 
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
+        mMap = googleMap;
+        getDeviceLocation();
 
+        if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+
+            return;
+        }
+        mMap.setMyLocationEnabled( true );
+        mMap.isMyLocationEnabled();
+        mMap.setOnMyLocationButtonClickListener(this);
+        mMap.setOnMyLocationClickListener(this);
+        Geocoder geo = new Geocoder(getContext(), Locale.getDefault());
         try{
             boolean isSuccess = googleMap.setMapStyle(MapStyleOptions.loadRawResourceStyle(getContext(),R.raw.map_style_2));
             if(!isSuccess){
@@ -202,70 +337,104 @@ public class mapa extends Fragment implements OnMapReadyCallback, GoogleMap.OnMy
         }
 
 
-        mMap = googleMap;
-        mMap.isMyLocationEnabled();
+
+
         if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             return;
         }
 
-
-        mMap.setMyLocationEnabled(true);
-        mDatabase.child("Tachos").addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull final DataSnapshot dataSnapshot) {
-
-                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-
-                    Tachos tachos = snapshot.getValue(Tachos.class);
-
-                    MarkerOptions markerOptions = new MarkerOptions();
-                    markerOptions.position(new LatLng(tachos.getLatitud(), tachos.getLongitud()));
-                    markerOptions.icon(BitmapDescriptorFactory.fromResource(R.mipmap.tacho_general));
-
-                    if (tachos.getTipoTacho().equals("Tacho")) {
-                        markerOptions.icon(BitmapDescriptorFactory.fromResource(R.mipmap.tacho_fin));
-
-                    } else if (tachos.getTipoTacho().equals("Contenedor")) {
-                        markerOptions.icon(BitmapDescriptorFactory.fromResource(R.mipmap.contenedor_fin));
-                    }
-                    //tmpRealTimeMarkers.clear();
-                    //tmpRealTimeMarkers.add(mMap.addMarker(markerOptions));
-
-                    Marker m = mMap.addMarker(markerOptions);
-                    m.setTag(tachos); //Añadimos los datos del contenedor al respectivo marcador.
-
-                    mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() { //Capturamos el evento CLICK de un marcador.
-                        @Override
-                        public boolean onMarkerClick(Marker marker) { //Obtenemos el marcador seleccionado.
-
-                            Tachos infoTacho = (Tachos) marker.getTag(); //Accedemos a los datos del marcador.
-
-                            LatLng latLng = new LatLng(marker.getPosition().latitude, marker.getPosition().longitude);
-
-                            mMap.animateCamera(CameraUpdateFactory.newLatLng(latLng)); //Situamos el mapa según la posición del marcador.
-
-                            new DialogoContenedor(getContext(), "" + marker.getId(), "" + infoTacho.getTipoTacho(), "" + infoTacho.getLugarDistrito(), "" + infoTacho.getComentario(), "" + infoTacho.getImagenbase64(), infoTacho.getLatitud(), infoTacho.getLongitud());
-
-
-                            return true; //Creamos el diálogo pasando los datos.
+       /* fusedLocationClient.getLastLocation()
+                .addOnSuccessListener(getActivity(), new OnSuccessListener<Location>() {
+                    @Override
+                    public void onSuccess(Location location) {
+                        if (location != null) {
+                            // Logic to handle location object
                         }
-                    });
-                }
+                    }
+                });*/
+        fusedLocationClient.getLastLocation()
+                .addOnSuccessListener(getActivity(), new OnSuccessListener<Location>() {
+                    @Override
+                    public void onSuccess(Location location) {
+                        if (location != null) {
+                            try {
+
+                                address = geo.getFromLocation(location.getLatitude(),location.getLongitude(),1);
+                                String pais=address.get(0).getCountryName();
+                                String departamento= address.get(0).getAdminArea();
+                                String distrito=address.get(0).getLocality();
+                                Log.e("rotclean",address.get(0)+"");
+                                mMap.setMyLocationEnabled(true);
+                                mDatabase.child("Tachos").child(pais.replace(" ","")).child(departamento.replace(" ","")).child(distrito.replace(" ","")).addValueEventListener(new ValueEventListener() {
+                                    @Override
+                                    public void onDataChange(@NonNull final DataSnapshot dataSnapshot) {
+
+                                        for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+
+                                            Tachos tachos = snapshot.getValue(Tachos.class);
+
+                                            MarkerOptions markerOptions = new MarkerOptions();
+                                            markerOptions.position(new LatLng(tachos.getLatitud(), tachos.getLongitud()));
+                                            markerOptions.icon(BitmapDescriptorFactory.fromResource(R.mipmap.tacho_general));
+
+                                            if (tachos.getTipoTacho().equals("Tacho")) {
+                                                markerOptions.icon(BitmapDescriptorFactory.fromResource(R.mipmap.tacho_fin));
+
+                                            } else if (tachos.getTipoTacho().equals("Contenedor")) {
+                                                markerOptions.icon(BitmapDescriptorFactory.fromResource(R.mipmap.contenedor_fin));
+                                            }
+                                            //tmpRealTimeMarkers.clear();
+                                            //tmpRealTimeMarkers.add(mMap.addMarker(markerOptions));
+
+                                            Marker m = mMap.addMarker(markerOptions);
+                                            m.setTag(tachos); //Añadimos los datos del contenedor al respectivo marcador.
+
+                                            mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() { //Capturamos el evento CLICK de un marcador.
+                                                @Override
+                                                public boolean onMarkerClick(Marker marker) { //Obtenemos el marcador seleccionado.
+                                                    getRetrofitMap(new LatLng(mMap.getMyLocation().getLatitude(),mMap.getMyLocation().getLongitude()),
+                                                            new LatLng(marker.getPosition().latitude,marker.getPosition().longitude   ));
+                                                    Tachos infoTacho = (Tachos) marker.getTag(); //Accedemos a los datos del marcador.
+
+
+                                                    LatLng latLng = new LatLng(marker.getPosition().latitude, marker.getPosition().longitude);
+
+                                                    mMap.animateCamera(CameraUpdateFactory.newLatLng(latLng)); //Situamos el mapa según la posición del marcador.
+
+                                                    new DialogoContenedor(getContext(), "" + marker.getId(), "" + infoTacho.getTipoTacho(), "" + infoTacho.getLugarDistrito(), "" + infoTacho.getComentario(), "" + infoTacho.getImagenbase64(), infoTacho.getLatitud(), infoTacho.getLongitud());
+
+
+                                                    return true; //Creamos el diálogo pasando los datos.
+                                                }
+                                            });
+                                        }
+                                    }
+
+                                    @Override
+                                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                    }
+                                });
+
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    }
+                });
+
+
+      /*  if (address==null){
+             LatLng center=mMap.getCameraPosition().target;
+            try {
+
+                address = geo.getFromLocation(center.latitude),center.longitude,1);
+            } catch (IOException e) {
+                e.printStackTrace();
             }
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
+        }*/
 
-            }
-        });
-
-        if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-
-            return;
-        }
-
-        mMap.setOnMyLocationButtonClickListener(this);
-        mMap.setOnMyLocationClickListener(this);
 
     }
 
@@ -401,7 +570,12 @@ public class mapa extends Fragment implements OnMapReadyCallback, GoogleMap.OnMy
                                         if (locationResult==null)
                                             return;
                                         location = locationResult.getLastLocation();
-
+                                        try {
+                                            Geocoder geo = new Geocoder(getContext(), Locale.getDefault());
+                                            address = geo.getFromLocation(location.getLatitude(),location.getLongitude(),1);
+                                        } catch (IOException e) {
+                                            e.printStackTrace();
+                                        }
                                         mMap.moveCamera( CameraUpdateFactory.newLatLngZoom( new LatLng( location.getLatitude(),location.getLongitude() ),18) );
 
                                         fusedLocationProviderClient.removeLocationUpdates( locationCallback );
