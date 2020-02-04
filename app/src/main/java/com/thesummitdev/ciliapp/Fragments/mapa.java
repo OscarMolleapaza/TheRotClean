@@ -169,6 +169,7 @@ public class mapa extends Fragment implements OnMapReadyCallback, GoogleMap.OnMy
         sugerir.setOnClickListener(this);
 
         gpsEnable();
+        FirebaseDatabase.getInstance().setPersistenceEnabled(true);
         mDatabase = FirebaseDatabase.getInstance().getReference(); //Instanciar BD Firebase
         mapFragment.getMapAsync(this);
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(getContext());
@@ -365,57 +366,69 @@ public class mapa extends Fragment implements OnMapReadyCallback, GoogleMap.OnMy
                                     Log.e("Puno","entro");
                                     geo = new Geocoder(getContext(), Locale.getDefault());
                                 }
+                                int variable=0;
+
                                 address = geo.getFromLocation(location.getLatitude(),location.getLongitude(),2);
-                                Log.e("Puno",address.get(0).toString());
-                                String pais=address.get(0).getCountryName();
-                                String departamento= address.get(0).getAdminArea();
-                                String distrito=address.get(0).getLocality();
-                                Log.e("rotclean",address.get(0)+"");
+                               /* for (int i=0;i<address.size();i++){
+                                    if (address.get(i)!=null){
+                                        variable=i;
+                                        return;
+                                    }
+                                }*/
+
+                                Log.e("Puno",address.get(variable).toString());
+                                String pais=address.get(variable).getCountryName();
+                                String departamento= address.get(variable).getAdminArea();
+                                String distrito=address.get(variable).getLocality();
+                                Log.e("rotclean",address.get(variable)+"");
                                 mMap.setMyLocationEnabled(true);
                                 Log.e("Puno",pais.replace(" ","")+"  "+departamento.replace(" ","")+"  "+distrito.replace(" ","")+"  ");
                                 mDatabase.child("Tachos").child(pais.replace(" ","")).child(departamento.replace(" ","")).child(distrito.replace(" ","")).addValueEventListener(new ValueEventListener() {
                                     @Override
                                     public void onDataChange(@NonNull final DataSnapshot dataSnapshot) {
+                                        if(dataSnapshot.exists()){
+                                            for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
 
-                                        for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                                                Tachos tachos = snapshot.getValue(Tachos.class);
 
-                                            Tachos tachos = snapshot.getValue(Tachos.class);
+                                                MarkerOptions markerOptions = new MarkerOptions();
+                                                markerOptions.position(new LatLng(tachos.getLatitud(), tachos.getLongitud()));
+                                                markerOptions.icon(BitmapDescriptorFactory.fromResource(R.mipmap.tacho_general));
 
-                                            MarkerOptions markerOptions = new MarkerOptions();
-                                            markerOptions.position(new LatLng(tachos.getLatitud(), tachos.getLongitud()));
-                                            markerOptions.icon(BitmapDescriptorFactory.fromResource(R.mipmap.tacho_general));
+                                                if (tachos.getTipoTacho().equals("Tacho")) {
+                                                    markerOptions.icon(BitmapDescriptorFactory.fromResource(R.mipmap.tacho_fin));
 
-                                            if (tachos.getTipoTacho().equals("Tacho")) {
-                                                markerOptions.icon(BitmapDescriptorFactory.fromResource(R.mipmap.tacho_fin));
-
-                                            } else if (tachos.getTipoTacho().equals("Contenedor")) {
-                                                markerOptions.icon(BitmapDescriptorFactory.fromResource(R.mipmap.contenedor_fin));
-                                            }
-                                            //tmpRealTimeMarkers.clear();
-                                            //tmpRealTimeMarkers.add(mMap.addMarker(markerOptions));
-
-                                            Marker m = mMap.addMarker(markerOptions);
-                                            m.setTag(tachos); //Añadimos los datos del contenedor al respectivo marcador.
-
-                                            mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() { //Capturamos el evento CLICK de un marcador.
-                                                @Override
-                                                public boolean onMarkerClick(Marker marker) { //Obtenemos el marcador seleccionado.
-                                                    getRetrofitMap(new LatLng(mMap.getMyLocation().getLatitude(),mMap.getMyLocation().getLongitude()),
-                                                            new LatLng(marker.getPosition().latitude,marker.getPosition().longitude   ));
-                                                    Tachos infoTacho = (Tachos) marker.getTag(); //Accedemos a los datos del marcador.
-
-
-                                                    LatLng latLng = new LatLng(marker.getPosition().latitude, marker.getPosition().longitude);
-
-                                                    mMap.animateCamera(CameraUpdateFactory.newLatLng(latLng)); //Situamos el mapa según la posición del marcador.
-
-                                                    new DialogoContenedor(getContext(), "" + marker.getId(), "" + infoTacho.getTipoTacho(), "" + infoTacho.getLugarDistrito(), "" + infoTacho.getComentario(), "" + infoTacho.getImagenbase64(), infoTacho.getLatitud(), infoTacho.getLongitud());
-
-
-                                                    return true; //Creamos el diálogo pasando los datos.
+                                                } else if (tachos.getTipoTacho().equals("Contenedor")) {
+                                                    markerOptions.icon(BitmapDescriptorFactory.fromResource(R.mipmap.contenedor_fin));
                                                 }
-                                            });
+                                                //tmpRealTimeMarkers.clear();
+                                                //tmpRealTimeMarkers.add(mMap.addMarker(markerOptions));
+
+                                                Marker m = mMap.addMarker(markerOptions);
+                                                m.setTag(tachos); //Añadimos los datos del contenedor al respectivo marcador.
+
+                                                mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() { //Capturamos el evento CLICK de un marcador.
+                                                    @Override
+                                                    public boolean onMarkerClick(Marker marker) { //Obtenemos el marcador seleccionado.
+                                                        getRetrofitMap(new LatLng(mMap.getMyLocation().getLatitude(), mMap.getMyLocation().getLongitude()),
+                                                                new LatLng(marker.getPosition().latitude, marker.getPosition().longitude));
+                                                        Tachos infoTacho = (Tachos) marker.getTag(); //Accedemos a los datos del marcador.
+
+
+                                                        LatLng latLng = new LatLng(marker.getPosition().latitude, marker.getPosition().longitude);
+
+                                                        mMap.animateCamera(CameraUpdateFactory.newLatLng(latLng)); //Situamos el mapa según la posición del marcador.
+
+                                                        new DialogoContenedor(getContext(), "" + marker.getId(), "" + infoTacho.getTipoTacho(), "" + infoTacho.getLugarDistrito(), "" + infoTacho.getComentario(), "" + infoTacho.getImagenbase64(), infoTacho.getLatitud(), infoTacho.getLongitud());
+
+
+                                                        return true; //Creamos el diálogo pasando los datos.
+                                                    }
+                                                });
+                                            }
                                         }
+
+
                                     }
 
                                     @Override
