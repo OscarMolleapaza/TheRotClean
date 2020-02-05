@@ -3,6 +3,8 @@ package com.thesummitdev.ciliapp.Vistas;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -30,7 +32,7 @@ public class Register extends AppCompatActivity {
     EditText txtNombre, txtApellido, txtUsuario,txtContraseña;
     Spinner spnTipoUser;
     Button btnRegistrar;
-
+    ProgressDialog progressDoalog;
     FirebaseAuth mAuth;
     DatabaseReference mDatabase;
 
@@ -42,7 +44,10 @@ public class Register extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
         mDatabase = FirebaseDatabase.getInstance().getReference();
 
-
+        progressDoalog = new ProgressDialog(this);
+        progressDoalog.setMessage("Cargando...");
+        progressDoalog.setTitle("Subiendo Datos");
+        progressDoalog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
         txtNombre = (EditText)findViewById(R.id.txtName);
         txtApellido = (EditText)findViewById(R.id.txtLast);
         txtUsuario = (EditText)findViewById(R.id.txtUser);
@@ -53,7 +58,11 @@ public class Register extends AppCompatActivity {
         btnRegistrar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                progressDoalog.show();
                 registrar();
+
+
+
             }
         });
 
@@ -70,13 +79,11 @@ public class Register extends AppCompatActivity {
         //updateUI(currentUser);
     }
 
-    private void updateUI(FirebaseUser user){
-        if(user != null){
+    private void updateUI(){
 
+            Intent intent = new Intent(Register.this,MapsActivity.class);
+            startActivity(intent);
 
-           // Intent intent = new Intent(Register.this,MapsActivity.this);
-            //startActivity(intent);
-        }
 
     }
 
@@ -98,7 +105,6 @@ public class Register extends AppCompatActivity {
                         if (task.isSuccessful()) {
                             // Sign in success, update UI with the signed-in user's information
                             Log.d("", "createUserWithEmail:success");
-                            FirebaseUser user = mAuth.getCurrentUser();
 
 
                             Map<String,Object> users = new HashMap<>();
@@ -106,19 +112,20 @@ public class Register extends AppCompatActivity {
                             users.put("Apellidos",last);
                             users.put("email",user_email);
                             users.put("tipo",type);
-
+                            progressDoalog.dismiss();
                             mDatabase.child("Usuarios").child(task.getResult().getUser().getUid()).setValue(users);
 
-                            //updateUI(user);
+                            updateUI();
 
 
 
                         } else {
                             // If sign in fails, display a message to the user.
                             Log.w("", "createUserWithEmail:failure", task.getException());
-                            Toast.makeText(Register.this, "Authentication failed.",
+                            Toast.makeText(Register.this, "Error introduce datos correctos",
                                     Toast.LENGTH_SHORT).show();
-                            updateUI(null);
+                            progressDoalog.dismiss();
+
                         }
 
                         // ...
@@ -126,6 +133,7 @@ public class Register extends AppCompatActivity {
                 }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
+                progressDoalog.dismiss();
                 Toast.makeText(getApplicationContext(),""+e,Toast.LENGTH_LONG).show();
             }
         });

@@ -1,6 +1,7 @@
 package com.thesummitdev.ciliapp.Fragments;
 
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 
@@ -36,7 +37,7 @@ public class admin extends Fragment {
 
     EditText txtUsuario, txtContraseña;
     Button btnIngresar;
-
+     ProgressDialog progressDoalog;
     public admin() {
         // Required empty public constructor
     }
@@ -59,8 +60,18 @@ public class admin extends Fragment {
             @Override
             public void onClick(View view) {
 
+                progressDoalog = new ProgressDialog(getContext());
+                progressDoalog.setMessage("Cargando...");
+                progressDoalog.setTitle("Subiendo Datos");
+                progressDoalog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+                // show it
+                progressDoalog.show();
+                if(txtContraseña!=null&&txtUsuario!=null){
+                    logearUsuario();
+                }else{
+                    Toast.makeText(getContext(), "Completa los campos por favor", Toast.LENGTH_LONG).show();
+                }
 
-                logearUsuario();
 
 
             }
@@ -85,6 +96,7 @@ public class admin extends Fragment {
         if(user != null){
             Intent intent = new Intent(getActivity(), Register.class);
             startActivity(intent);
+
         }
 
     }
@@ -117,6 +129,7 @@ public class admin extends Fragment {
                                 Log.d(TAG, "signInWithEmail:success");
                                 FirebaseUser user = mAuth.getCurrentUser();
                                 updateUI(user);
+                                progressDoalog.dismiss();
                             } else {
                                 // If sign in fails, display a message to the user.
                                 Log.w(TAG, "signInWithEmail:failure", task.getException());
