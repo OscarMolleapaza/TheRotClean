@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@color/primary_dark"
-    tools:context=".Fragments.Distritos">
+    tools:context=".fragments.Distritos">
 
 
     <ScrollView

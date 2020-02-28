@@ -1,5 +1,41 @@
 <resources>
     <string name="app_name">CiliApp</string>
+
+    <string-array name="tips_array">
+        <item>Usa productos que puedan reutilizarse.</item>
+        <item>Apaga las luces y cuando te marches de casa comprueba que todo está apagado.</item>
+        <item>Evita dejar los aparatos enchufados ¡Aunque estén apagados, siguen consumiendo energía!</item>
+        <item>Cierra los grifos correctamente y controla las fugas.</item>
+        <item>Lleva tus propias bolsas al supermercado.</item>
+        <item>Aprovecha la luz natural, abre las ventanas y sube las persianas para iluminar tu casa en la mañana.</item>
+        <item>Cambia las bombillas de tu casa.</item>
+        <item>Recicla todo lo que puedas. Antes de botar algo, piensa si le puedes dar algún otro uso.</item>
+        <item>¡Planta árboles! </item>
+        <item>Repara los grifos que gotean. Una gota por segundo son 30 litros al día de agua que se pierden.</item>
+        <item>Reduce el uso de bolsas plásticas.</item>
+        <item>Aprovecha bien el papel, úsalo por las dos caras.</item>
+        <item>¡Utiliza pilas recargables! A la larga, resultan más baratas y son ecoamigables.</item>
+        <item>Utiliza bolsas ecológicas en tus compras..</item>
+        <item>Utiliza botellas retornables.</item>
+        <item>No compres lo que no te hace falta.</item>
+        <item>Cierra el grifo al cepillarte los dientes o al rasurarte.</item>
+        <item>Cocina la cantidad adecuada para evitar tirar la comida.</item>
+        <item>Todos somos responsables de preservar el planeta. El cambio comienza en tí.</item>
+        <item>Utiliza vasos de vidrio en lugar de vasos plásticos.</item>
+        <item>Ten siempre disponible bolsas de tela o una mochila donde puedas guardar lo que compres.</item>
+        <item>No dejes correr el agua mientras cepillas tus dientes o lavas tu cara.</item>
+        <item>No dejes correr el agua cuando laves los platos a mano.</item>
+        <item>Recicla el papel y el cartón.</item>
+        <item>Cambia tus bombillas por unas que sean de bajo consumo.</item>
+        <item>Movilízate en bicicleta o usa el transporte público.</item>
+        <item>Apaga tus dispositivos si no los usas.</item>
+        <item>El plástico es uno de los elementos más contaminantes ¡Reutilízalo siempre que puedas!</item>
+        <item>Reutiliza los envases de plástico.</item>
+        <item>Cambia tu terma eléctrica por una solar. En unos meses habrás ahorrado en electricidad de una manera significativa.</item>
+        <item>Lleva contigo una bolsa de tela para que no utilices bolsas de plástico cuando hagas compras.</item>
+        <item>Planta árboles en tu jardín. Son estéticos y ayudan a controlar las emisiones de CO2.</item>
+    </string-array>
+
     <string name="title_activity_maps">Rotclean</string>
     <string name="politicas"><a href="http://www.rotaractclubpuno.com/wp-content/uploads/2019/10/POLITICAS-DE-PRIVACIDAD-DE-LA-APLICACI%C3%93N-CILIAPP.pdf">Politicas de Privacidad</a></string>
 

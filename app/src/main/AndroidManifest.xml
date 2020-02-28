@@ -19,14 +19,14 @@
         android:roundIcon="@mipmap/logo_app"
         android:supportsRtl="true"
         android:theme="@style/CustomTheme">
-        <activity android:name="com.thesummitdev.ciliapp.Vistas.Register"></activity>
+        <activity android:name="com.thesummitdev.ciliapp.views.Register"></activity>
 
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_key" />
 
-        <activity android:name="com.thesummitdev.ciliapp.Vistas.MapsActivity">
+        <activity android:name="com.thesummitdev.ciliapp.views.MapsActivity">
 
         </activity>
         <activity android:name="com.thesummitdev.ciliapp.controller">

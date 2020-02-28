@@ -12,7 +12,7 @@ import androidx.fragment.app.Fragment;
 import com.github.paolorotolo.appintro.AppIntro;
 import com.github.paolorotolo.appintro.AppIntroFragment;
 import com.github.paolorotolo.appintro.model.SliderPage;
-import com.thesummitdev.ciliapp.Vistas.MapsActivity;
+import com.thesummitdev.ciliapp.views.MapsActivity;
 
 public class wizard_init extends AppIntro {
 

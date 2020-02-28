@@ -10,7 +10,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.github.paolorotolo.appintro.AppIntro;
-import com.thesummitdev.ciliapp.Vistas.MapsActivity;
+import com.thesummitdev.ciliapp.views.MapsActivity;
 
 public class controller extends AppIntro {
     SharedPreferences settings;
